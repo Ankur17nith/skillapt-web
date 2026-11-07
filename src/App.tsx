@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { HomePage } from "./pages/HomePage";
@@ -14,22 +13,15 @@ import { BrandPage } from "./pages/BrandPage";
 import { NotFoundPage } from "./pages/NotFoundPage";
 
 export default function App() {
-  const [toast, setToast] = useState(false);
-
-  const notify = () => {
-    setToast(true);
-    window.setTimeout(() => setToast(false), 2000);
-  };
-
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={<Layout toast={toast} setToast={setToast} />}>
-          <Route path="/" element={<HomePage notify={notify} />} />
+        <Route element={<Layout />}>
+          <Route path="/" element={<HomePage />} />
           <Route path="/browse" element={<BrowsePage />} />
           <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/collections" element={<CollectionsPage />} />
-          <Route path="/skills/:slug" element={<SkillDetailPage notify={notify} />} />
+          <Route path="/skills/:slug" element={<SkillDetailPage />} />
           <Route path="/submit" element={<SubmitPage />} />
           <Route path="/docs/*" element={<DocsPage />} />
           <Route path="/docs" element={<DocsPage />} />

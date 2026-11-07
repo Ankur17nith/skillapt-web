@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useOutletContext } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Link } from "../components/Link";
 import { Icon } from "../components/Icon";
 import { Logo } from "../components/Logo";
@@ -9,22 +11,43 @@ import { CodeBlock } from "../components/CodeBlock";
 import { ReportModal } from "../components/ReportModal";
 import { SectionTitle } from "../components/SectionTitle";
 import { SkillCard } from "../components/SkillCard";
-import { skills } from "../data/initialData";
+import { NotFoundPage } from "./NotFoundPage";
+import { getSkillBySlug, getRelated, getInstallCommand, getSkillLanguage, formatRelativeTime } from "../lib/skills";
 
-export function SkillDetailPage({ notify }: { notify?: () => void }) {
+export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: string, msg?: string) => void }) {
   const { slug } = useParams<{ slug: string }>();
-  const skill = skills.find((s) => s.name === slug) || skills[0];
-  const [tab, setTab] = useState("README");
-  const [installMode, setInstallMode] = useState("skillpm");
-  const [report, setReport] = useState(false);
+  const outletCtx = useOutletContext<{ notify?: (title?: string, msg?: string) => void } | null>();
+  const notify = propNotify || outletCtx?.notify || (() => {});
 
-  const skillName = skill.name;
-  const authorName = skill.author;
+  const [tab, setTab] = useState("README");
+  const [installMode, setInstallMode] = useState<"skillpm" | "npx" | "manual">("skillpm");
+  const [reportOpen, setReportOpen] = useState(false);
+
+  if (!slug) {
+    return <NotFoundPage />;
+  }
+
+  const skill = getSkillBySlug(slug);
+  if (!skill) {
+    return <NotFoundPage />;
+  }
+
+  const version = skill.version || skill.ref.replace(/^v/, "");
+  const lang = getSkillLanguage(skill);
+  const relatedSkills = getRelated(skill, 3);
+  const installCmd = getInstallCommand(skill);
 
   const installCommands: Record<string, string> = {
-    skillpm: `skillpm install ${authorName}/${skillName}`,
-    npx: `npx skillpm install ${authorName}/${skillName}`,
-    manual: `git clone github.com/${authorName}/${skillName}`,
+    skillpm: installCmd,
+    npx: `npx ${installCmd}`,
+    manual: `git clone https://github.com/${skill.repo}.git`,
+  };
+
+  const handleReportSubmit = (_reason: string, _details: string) => {
+    notify(
+      "Report submitted",
+      "Thank you for reporting. Our security team will review it."
+    );
   };
 
   return (
@@ -34,7 +57,7 @@ export function SkillDetailPage({ notify }: { notify?: () => void }) {
         <span>/</span>
         <Link to="/browse">Browse</Link>
         <span>/</span>
-        <span>{skillName}</span>
+        <span>{skill.name}</span>
       </div>
       <div className="detail-grid">
         <article className="detail-main">
@@ -44,12 +67,27 @@ export function SkillDetailPage({ notify }: { notify?: () => void }) {
             </span>
             <div>
               <div>
-                <h1>{skillName}</h1>
+                <h1>{skill.name}</h1>
+                {skill.verified && (
+                  <span
+                    className="verified"
+                    title="Verified publisher"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      marginLeft: "8px",
+                      color: "var(--accent)",
+                      verticalAlign: "middle",
+                    }}
+                  >
+                    <Icon name="check" size={18} />
+                  </span>
+                )}
               </div>
-              <p>by @{authorName}</p>
+              <p>by @{skill.author}</p>
             </div>
           </div>
-          <p className="lead">{skill.description}</p>
+          <p className="lead">{skill.longDescription || skill.description}</p>
           <div className="tags">
             {skill.tags.map((tag) => (
               <span key={tag}>{tag}</span>
@@ -58,20 +96,30 @@ export function SkillDetailPage({ notify }: { notify?: () => void }) {
           <dl className="metadata">
             <div>
               <dt>Version</dt>
-              <dd>{skill.version}</dd>
+              <dd>{version}</dd>
             </div>
             <div>
               <dt>Last updated</dt>
-              <dd>May 24, 2025</dd>
+              <dd>
+                {new Date(skill.updatedAt).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </dd>
             </div>
             <div>
               <dt>License</dt>
-              <dd>MIT</dd>
+              <dd>{skill.license}</dd>
             </div>
           </dl>
           <div className="tabs">
             {["README", "Versions", "Security"].map((t) => (
-              <button className={tab === t ? "active" : ""} onClick={() => setTab(t)} key={t}>
+              <button
+                className={tab === t ? "active" : ""}
+                onClick={() => setTab(t)}
+                key={t}
+              >
                 {t}
               </button>
             ))}
@@ -79,24 +127,37 @@ export function SkillDetailPage({ notify }: { notify?: () => void }) {
           {tab === "README" && (
             <div className="markdown">
               <Logo variant="full" />
-              <h2>{skillName.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")}</h2>
-              <p>{skill.description}</p>
-              <h3>Installation</h3>
-              <CodeBlock>{`skillpm install ${authorName}/${skillName}`}</CodeBlock>
-              <h3>What it can do</h3>
-              <ul>
-                <li>Extract text from local and remote PDF files</li>
-                <li>Return summaries with page-level citations</li>
-                <li>Answer questions using only the supplied document</li>
-              </ul>
-              <h3>Usage</h3>
-              <CodeBlock>{`agent.use("${skillName}", {\n  file: "./annual-report.pdf",\n  format: "brief"\n})`}</CodeBlock>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                components={{
+                  code({ className, children, ...props }) {
+                    const text = String(children).replace(/\n$/, "");
+                    if (
+                      text.includes("\n") ||
+                      text.startsWith("skillpm") ||
+                      text.startsWith("npx") ||
+                      text.startsWith("agent.use")
+                    ) {
+                      return <CodeBlock>{text}</CodeBlock>;
+                    }
+                    return (
+                      <code className={className} {...props}>
+                        {children}
+                      </code>
+                    );
+                  },
+                }}
+              >
+                {skill.readmeMarkdown}
+              </ReactMarkdown>
             </div>
           )}
           {tab === "Versions" && (
             <div className="tab-panel">
               <h2>Version history</h2>
-              <p>{skill.version} — Improved citation accuracy and large-file handling.</p>
+              <p>
+                <strong>{version}</strong> ({formatRelativeTime(skill.updatedAt)}) — Initial registry release with security scanning.
+              </p>
             </div>
           )}
           {tab === "Security" && (
@@ -105,7 +166,7 @@ export function SkillDetailPage({ notify }: { notify?: () => void }) {
               <div>
                 <Icon name="check" />{" "}
                 <span>
-                  <strong>Scanned</strong> No known issues found
+                  <strong>Scanned</strong> No known vulnerabilities found
                 </span>
               </div>
               <div className="warning">
@@ -115,9 +176,14 @@ export function SkillDetailPage({ notify }: { notify?: () => void }) {
                 </span>
               </div>
               <div>
-                <Icon name="check" />
+                <Icon name="check" />{" "}
                 <span>
-                  <strong>Last scan date</strong> May 24, 2025
+                  <strong>Last scan date</strong>{" "}
+                  {new Date(skill.updatedAt).toLocaleDateString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
                 </span>
               </div>
             </div>
@@ -125,7 +191,7 @@ export function SkillDetailPage({ notify }: { notify?: () => void }) {
         </article>
         <aside className="install-panel">
           <div className="mini-tabs">
-            {Object.keys(installCommands).map((mode) => (
+            {(["skillpm", "npx", "manual"] as const).map((mode) => (
               <button
                 className={installMode === mode ? "active" : ""}
                 onClick={() => setInstallMode(mode)}
@@ -135,33 +201,42 @@ export function SkillDetailPage({ notify }: { notify?: () => void }) {
               </button>
             ))}
           </div>
-          <CopyCommand command={installCommands[installMode]} notify={notify || (() => {})} />
-          <Button onClick={() => window.open(`https://github.com/${authorName}/${skillName}`, "_blank")}>
+          <CopyCommand
+            command={installCommands[installMode]}
+            notify={() => notify("Copied to clipboard", "Install command copied.")}
+          />
+          <Button
+            onClick={() => window.open(`https://github.com/${skill.repo}`, "_blank")}
+          >
             View on GitHub
           </Button>
-          <Button variant="ghost" onClick={() => setReport(true)}>
+          <Button variant="ghost" onClick={() => setReportOpen(true)}>
             Report
           </Button>
           <dl className="package-facts">
             <div>
               <dt>Version</dt>
-              <dd>{skill.version}</dd>
+              <dd>{version}</dd>
             </div>
             <div>
               <dt>License</dt>
-              <dd>MIT</dd>
+              <dd>{skill.license}</dd>
             </div>
             <div>
               <dt>Language</dt>
-              <dd>{skill.language}</dd>
+              <dd>{lang}</dd>
             </div>
             <div>
               <dt>Repository</dt>
-              <dd>{authorName}/{skillName}</dd>
+              <dd>{skill.repo}</dd>
             </div>
             <div>
-              <dt>Dependencies</dt>
-              <dd>pdf.js, zod</dd>
+              <dt>Stars</dt>
+              <dd>{skill.stars.toLocaleString()}</dd>
+            </div>
+            <div>
+              <dt>Installs</dt>
+              <dd>{skill.installs.toLocaleString()}</dd>
             </div>
           </dl>
           <div className="compatibility">
@@ -172,24 +247,33 @@ export function SkillDetailPage({ notify }: { notify?: () => void }) {
           </div>
         </aside>
       </div>
-      <section className="related">
-        <SectionTitle title="Related skills" />
-        <div className="card-grid">
-          {skills
-            .filter((s) => s.name !== skillName)
-            .slice(0, 3)
-            .map((s) => (
-              <SkillCard key={s.name} skill={s} />
+      {relatedSkills.length > 0 && (
+        <section className="related">
+          <SectionTitle title="Related skills" />
+          <div className="card-grid">
+            {relatedSkills.map((s) => (
+              <SkillCard key={s.slug} skill={s} />
             ))}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
       <div className="mobile-install">
-        <CopyCommand command={`skillpm install ${authorName}/${skillName}`} notify={notify || (() => {})} />
-        <Button onClick={() => window.open(`https://github.com/${authorName}/${skillName}`, "_blank")}>
+        <CopyCommand
+          command={installCommands.skillpm}
+          notify={() => notify("Copied to clipboard", "Install command copied.")}
+        />
+        <Button
+          onClick={() => window.open(`https://github.com/${skill.repo}`, "_blank")}
+        >
           View on GitHub
         </Button>
       </div>
-      {report && <ReportModal close={() => setReport(false)} />}
+      {reportOpen && (
+        <ReportModal
+          close={() => setReportOpen(false)}
+          onSubmit={handleReportSubmit}
+        />
+      )}
     </main>
   );
 }

@@ -8,15 +8,23 @@ import { ScrollToTop } from "./ScrollToTop";
 import { DocumentTitle } from "./DocumentTitle";
 import type { Theme } from "../types";
 
-export function Layout({
-  toast,
-  setToast,
-}: {
-  toast: boolean;
-  setToast: (val: boolean) => void;
-}) {
+export interface ToastData {
+  title: string;
+  message: string;
+}
+
+export function Layout() {
   const [theme, setTheme] = useState<Theme>("light");
   const [palette, setPalette] = useState(false);
+  const [toastData, setToastData] = useState<ToastData | null>(null);
+
+  const notify = (
+    title = "Copied to clipboard",
+    message = "The install command is ready to paste."
+  ) => {
+    setToastData({ title, message });
+    window.setTimeout(() => setToastData(null), 2000);
+  };
 
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
@@ -39,10 +47,15 @@ export function Layout({
         toggleTheme={() => setTheme(theme === "light" ? "dark" : "light")}
         openPalette={() => setPalette(true)}
       />
-      <Outlet context={{ openPalette: () => setPalette(true) }} />
+      <Outlet
+        context={{
+          openPalette: () => setPalette(true),
+          notify,
+        }}
+      />
       <Footer />
       {palette && <CommandPalette close={() => setPalette(false)} />}
-      {toast && <Toast />}
+      {toastData && <Toast title={toastData.title} message={toastData.message} />}
     </div>
   );
 }

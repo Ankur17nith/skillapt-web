@@ -1,12 +1,18 @@
 import { Icon } from "./Icon";
 
-export function Toast() {
+export function Toast({
+  title = "Copied to clipboard",
+  message = "The install command is ready to paste.",
+}: {
+  title?: string;
+  message?: string;
+}) {
   return (
-    <div className="toast">
+    <div className="toast" role="status" aria-live="polite">
       <Icon name="check" />
       <div>
-        <strong>Copied to clipboard</strong>
-        <span>The install command is ready to paste.</span>
+        <strong>{title}</strong>
+        <span>{message}</span>
       </div>
     </div>
   );
