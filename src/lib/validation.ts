@@ -60,3 +60,89 @@ export function generateRegistryPayload(values: SubmitFormValues) {
     version: values.version.trim() || "0.1.0",
   };
 }
+
+export interface SkillManifest {
+  name: string;
+  version: string;
+  description: string;
+  license: string;
+  category: string;
+  compatibility: string[];
+  permissions: {
+    network: boolean;
+    shell: boolean;
+    filesystem: "none" | "read" | "write" | "read-write";
+  };
+  repository?: string;
+  keywords?: string[];
+  dependencies?: Record<string, string>;
+}
+
+export function validateSkillManifest(manifest: Partial<SkillManifest>): Record<string, string> {
+  const errors: Record<string, string> = {};
+
+  // Package name regex: optional scope, 3-50 chars total name, lowercase alphanumeric + hyphen
+  const nameRegex = /^(@[a-z0-9-]{2,30}\/)?[a-z0-9][a-z0-9-]{1,48}[a-z0-9]$/;
+  if (!manifest.name?.trim()) {
+    errors.name = "Package name is required.";
+  } else if (!nameRegex.test(manifest.name.trim())) {
+    errors.name = "Invalid package name format. Must be lowercase alphanumeric and hyphens (3-50 chars).";
+  }
+
+  // SemVer regex
+  const semverRegex = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/;
+  if (!manifest.version?.trim()) {
+    errors.version = "Version is required.";
+  } else if (!semverRegex.test(manifest.version.trim())) {
+    errors.version = "Version must be valid SemVer 2.0.0 (e.g. 1.0.0).";
+  }
+
+  if (!manifest.description?.trim()) {
+    errors.description = "Description is required.";
+  } else if (manifest.description.trim().length < 10) {
+    errors.description = "Description must be at least 10 characters.";
+  } else if (manifest.description.trim().length > 300) {
+    errors.description = "Description cannot exceed 300 characters.";
+  }
+
+  if (!manifest.license?.trim()) {
+    errors.license = "SPDX license is required.";
+  }
+
+  const validCategories = [
+    "documents",
+    "coding",
+    "research",
+    "data",
+    "devtools",
+    "communication",
+    "productivity",
+    "other",
+  ];
+  if (!manifest.category) {
+    errors.category = "Category is required.";
+  } else if (!validCategories.includes(manifest.category.toLowerCase())) {
+    errors.category = `Category must be one of: ${validCategories.join(", ")}`;
+  }
+
+  if (!manifest.compatibility || !Array.isArray(manifest.compatibility) || manifest.compatibility.length === 0) {
+    errors.compatibility = "At least one compatibility runtime is required.";
+  }
+
+  if (!manifest.permissions || typeof manifest.permissions !== "object") {
+    errors.permissions = "Declared permissions object is required.";
+  } else {
+    if (typeof manifest.permissions.network !== "boolean") {
+      errors["permissions.network"] = "permissions.network must be a boolean.";
+    }
+    if (typeof manifest.permissions.shell !== "boolean") {
+      errors["permissions.shell"] = "permissions.shell must be a boolean.";
+    }
+    const validFs = ["none", "read", "write", "read-write"];
+    if (!validFs.includes(manifest.permissions.filesystem)) {
+      errors["permissions.filesystem"] = `permissions.filesystem must be one of: ${validFs.join(", ")}`;
+    }
+  }
+
+  return errors;
+}
