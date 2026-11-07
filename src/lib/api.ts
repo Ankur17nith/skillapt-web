@@ -327,6 +327,21 @@ function saveStoredTokens(tokens: ApiToken[]) {
   }
 }
 
+let fallbackMockUser: ApiUser | null = null;
+
+export function setFallbackMockUser(user: ApiUser | null) {
+  fallbackMockUser = user;
+  if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
+    try {
+      if (user) {
+        localStorage.setItem("skillapt_mock_user", JSON.stringify(user));
+      } else {
+        localStorage.removeItem("skillapt_mock_user");
+      }
+    } catch {}
+  }
+}
+
 export const api = {
   /**
    * Fetch skills with query, filters, sorting and pagination
@@ -492,14 +507,15 @@ export const api = {
       }
     }
 
-    // Fallback: check localStorage mock session for offline dashboard preview
-    if (typeof window !== "undefined") {
-      const mock = localStorage.getItem("skillapt_mock_user");
-      if (mock) {
-        try {
-          return JSON.parse(mock) as ApiUser;
-        } catch {}
-      }
+    if (fallbackMockUser) return fallbackMockUser;
+    if (typeof window !== "undefined" && typeof localStorage !== "undefined") {
+      try {
+        const mock = localStorage.getItem("skillapt_mock_user");
+        if (mock) {
+          fallbackMockUser = JSON.parse(mock) as ApiUser;
+          return fallbackMockUser;
+        }
+      } catch {}
     }
     return null;
   },
@@ -512,9 +528,7 @@ export const api = {
       clearApiCache();
       await request("/v1/auth/logout", { method: "POST" });
     }
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("skillapt_mock_user");
-    }
+    setFallbackMockUser(null);
     clearApiCache();
   },
 

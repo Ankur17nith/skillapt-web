@@ -17,6 +17,7 @@ const BrandPage = lazy(() => import("./pages/BrandPage").then((m) => ({ default:
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })));
 
 import { Container } from "./components/Container";
+import { AuthProvider } from "./lib/auth";
 
 function RouteFallback() {
   return (
@@ -31,26 +32,28 @@ function RouteFallback() {
 export default function App() {
   return (
     <HelmetProvider>
-      <BrowserRouter>
-        <Suspense fallback={<RouteFallback />}>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/browse" element={<BrowsePage />} />
-              <Route path="/categories" element={<CategoriesPage />} />
-              <Route path="/collections" element={<CollectionsPage />} />
-              <Route path="/skills/:slug" element={<SkillDetailPage />} />
-              <Route path="/submit" element={<SubmitPage />} />
-              <Route path="/docs/*" element={<DocsPage />} />
-              <Route path="/docs" element={<DocsPage />} />
-              <Route path="/security" element={<SecurityPage />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/brand" element={<BrandPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Route>
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Suspense fallback={<RouteFallback />}>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/browse" element={<BrowsePage />} />
+                <Route path="/categories" element={<CategoriesPage />} />
+                <Route path="/collections" element={<CollectionsPage />} />
+                <Route path="/skills/:slug" element={<SkillDetailPage />} />
+                <Route path="/submit" element={<SubmitPage />} />
+                <Route path="/docs/*" element={<DocsPage />} />
+                <Route path="/docs" element={<DocsPage />} />
+                <Route path="/security" element={<SecurityPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/brand" element={<BrandPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+              </Route>
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </AuthProvider>
     </HelmetProvider>
   );
 }
