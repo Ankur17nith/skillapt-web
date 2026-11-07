@@ -5,12 +5,14 @@ import { SectionTitle } from "../components/SectionTitle";
 import { Icon } from "../components/Icon";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
+import { SEO } from "../components/SEO";
 
 export function SecurityPage() {
   const navigate = useNavigate();
   return (
     <main className="page">
       <Container>
+        <SEO title="Security" description="Learn about the skillapt security model and permission guarantees." url="/security" />
         <PageHeader title="How we keep skills safe">
           <p>Clear checks, visible permissions, and a public process.</p>
         </PageHeader>

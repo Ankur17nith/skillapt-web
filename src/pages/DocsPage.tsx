@@ -6,6 +6,8 @@ import { CodeBlock } from "../components/CodeBlock";
 import { Container } from "../components/Container";
 import { getAllDocs, getDocBySlug } from "../lib/docs";
 
+import { SEO } from "../components/SEO";
+
 export function DocsPage() {
   const { "*": restSlug } = useParams();
   const allDocs = getAllDocs();
@@ -15,6 +17,7 @@ export function DocsPage() {
   return (
     <main className="page">
       <Container>
+        <SEO title={doc.title} description={`${doc.label} documentation for skillapt.`} url={`/docs/${doc.slug}`} />
         <div className="docs-layout">
           <aside className="docs-nav">
         <Logo variant="full" />

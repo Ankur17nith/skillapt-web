@@ -1,11 +1,13 @@
 import { PageHeader } from "../components/PageHeader";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
+import { SEO } from "../components/SEO";
 
 export function AboutPage() {
   return (
     <main className="page">
       <Container>
+        <SEO title="About" description="About skillapt, our mission, and open-source tooling." url="/about" />
         <div className="narrow">
           <PageHeader title="About skillapt">
             <p>We make useful agent capabilities easier to find, inspect, and share.</p>

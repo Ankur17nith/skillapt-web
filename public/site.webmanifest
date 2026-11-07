@@ -1,7 +1,7 @@
 {
-  "name": "skillpm",
-  "short_name": "skillpm",
-  "description": "The package manager for AI skills",
+  "name": "skillapt",
+  "short_name": "skillapt",
+  "description": "The package manager for AI agent skills",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#F5F3EE",

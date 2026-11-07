@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { PageHeader } from "../components/PageHeader";
 import { Icon } from "../components/Icon";
 import { Container } from "../components/Container";
+import { SEO } from "../components/SEO";
 import { collections } from "../data/initialData";
 
 export function CollectionsPage() {
@@ -9,6 +10,7 @@ export function CollectionsPage() {
   return (
     <main className="page">
       <Container>
+        <SEO title="Collections" description="Curated sets of AI agent skills for developer workflows." url="/collections" />
         <PageHeader title="Collections">
           <p>Small, maintained sets for common developer workflows.</p>
         </PageHeader>

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://skillpm.dev/sitemap.xml
+Sitemap: https://skillapt.dev/sitemap.xml

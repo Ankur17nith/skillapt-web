@@ -4,12 +4,14 @@ import { SectionTitle } from "../components/SectionTitle";
 import { Logo } from "../components/Logo";
 import { Button } from "../components/Button";
 import { Container } from "../components/Container";
+import { SEO } from "../components/SEO";
 
 export function BrandPage() {
   const navigate = useNavigate();
   return (
     <main className="page brand-page">
       <Container>
+        <SEO title="Brand Assets" description="Brand assets, logos, and style guidelines for skillapt." url="/brand" />
         <PageHeader title="Brand assets">
           <p>Logo files and usage guidance for skillapt.</p>
         </PageHeader>
