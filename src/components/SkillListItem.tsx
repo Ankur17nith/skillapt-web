@@ -1,10 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import { Icon } from "./Icon";
-import type { Nav, Skill } from "../types";
+import type { Skill } from "../types";
 
-export function SkillListItem({ skill, nav }: { skill: Skill; nav: Nav }) {
+export function SkillListItem({ skill }: { skill: Skill }) {
+  const navigate = useNavigate();
+  const slug = (skill as any).slug || skill.name;
   return (
     <article className="skill-list-item">
-      <button className="skill-list-main" onClick={() => nav("/skills/pdf-summarizer")}>
+      <button className="skill-list-main" onClick={() => navigate(`/skills/${slug}`)}>
         <span className="skill-icon">
           <Icon name="package" size={16} />
         </span>

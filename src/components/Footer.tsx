@@ -1,8 +1,7 @@
 import { Logo } from "./Logo";
 import { Link } from "./Link";
-import type { Nav } from "../types";
 
-export function Footer({ nav }: { nav: Nav }) {
+export function Footer() {
   const groups = [
     [
       "Product",
@@ -11,13 +10,18 @@ export function Footer({ nav }: { nav: Nav }) {
       ["Collections", "/collections"],
     ],
     ["Developers", ["Publish", "/submit"], ["Documentation", "/docs"], ["Security", "/security"]],
-    ["Project", ["About", "/about"], ["Brand assets", "/brand"], ["GitHub", "https://github.com"]],
+    [
+      "Project",
+      ["About", "/about"],
+      ["Brand assets", "/brand"],
+      ["GitHub", "https://github.com/Ankur17nith/skillpm-web"],
+    ],
   ] as const;
   return (
     <footer>
       <div className="footer-main">
         <div>
-          <Logo variant="full" nav={nav} />
+          <Logo variant="full" />
           <p>The open package manager for trusted AI agent skills.</p>
         </div>
         {groups.map(([title, ...items]) => (
@@ -25,11 +29,11 @@ export function Footer({ nav }: { nav: Nav }) {
             <strong>{title}</strong>
             {items.map(([label, path]) =>
               path.startsWith("http") ? (
-                <a key={label} href={path}>
+                <a key={label} href={path} target="_blank" rel="noopener noreferrer">
                   {label}
                 </a>
               ) : (
-                <Link key={label} to={path} nav={nav}>
+                <Link key={label} to={path}>
                   {label}
                 </Link>
               ),

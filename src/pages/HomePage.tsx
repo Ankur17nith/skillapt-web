@@ -1,3 +1,4 @@
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { SearchBar } from "../components/SearchBar";
 import { CopyCommand } from "../components/CopyCommand";
 import { TerminalWindow } from "../components/TerminalWindow";
@@ -10,17 +11,12 @@ import { FeatureCard } from "../components/FeatureCard";
 import { Button } from "../components/Button";
 import { FAQ } from "../components/FAQ";
 import { skills } from "../data/initialData";
-import type { Nav } from "../types";
 
-export function HomePage({
-  nav,
-  openPalette,
-  notify,
-}: {
-  nav: Nav;
-  openPalette: () => void;
-  notify: () => void;
-}) {
+export function HomePage({ notify }: { notify?: () => void }) {
+  const navigate = useNavigate();
+  const outletCtx = useOutletContext<{ openPalette?: () => void } | null>();
+  const openPalette = outletCtx?.openPalette || (() => {});
+
   return (
     <>
       <section className="home-hero">
@@ -30,10 +26,10 @@ export function HomePage({
             <h1>Your AI skills, one package away.</h1>
             <p>Discover, install, and share reusable skills for the AI agents you build with.</p>
             <SearchBar openPalette={openPalette} />
-            <CopyCommand command="npx skillpm install user/repo" notify={notify} />
+            <CopyCommand command="npx skillpm install user/repo" notify={notify || (() => {})} />
             <div className="hero-actions">
-              <Button onClick={() => nav("/browse")}>Browse skills</Button>
-              <Link to="/docs" nav={nav} className="hero-docs">
+              <Button onClick={() => navigate("/browse")}>Browse skills</Button>
+              <Link to="/docs" className="hero-docs">
                 Read the CLI docs
               </Link>
             </div>
@@ -46,15 +42,11 @@ export function HomePage({
         <section>
           <SectionTitle
             title="Recently updated"
-            action={
-              <Link to="/browse" nav={nav}>
-                View all
-              </Link>
-            }
+            action={<Link to="/browse">View all</Link>}
           />
           <div className="skill-list home-skill-list">
             {skills.slice(0, 5).map((s) => (
-              <SkillListItem key={s.name} skill={s} nav={nav} />
+              <SkillListItem key={s.name} skill={s} />
             ))}
           </div>
         </section>
@@ -71,7 +63,7 @@ export function HomePage({
               "Automation",
               "Security",
             ].map((c) => (
-              <Link key={c} to="/categories" nav={nav}>
+              <Link key={c} to="/categories">
                 <Icon name={c === "Security" ? "shield" : c === "Coding" ? "code" : "package"} />
                 <span>{c}</span>
               </Link>
@@ -101,7 +93,7 @@ export function HomePage({
             <FeatureCard title="Security scanning">Automated checks on every release.</FeatureCard>
             <FeatureCard title="Open source">Inspect source and requested permissions.</FeatureCard>
           </div>
-          <Link to="/security" nav={nav} className="inline-link">
+          <Link to="/security" className="inline-link">
             Learn about security
           </Link>
         </section>
@@ -110,7 +102,7 @@ export function HomePage({
             <h2>Share your skill with the world</h2>
             <p>Publish your agent capability in the public registry.</p>
           </div>
-          <Button onClick={() => nav("/submit")}>Submit a skill</Button>
+          <Button onClick={() => navigate("/submit")}>Submit a skill</Button>
         </section>
         <section>
           <SectionTitle title="Questions, answered" />

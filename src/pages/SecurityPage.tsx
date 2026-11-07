@@ -1,11 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import { PageHeader } from "../components/PageHeader";
 import { FeatureCard } from "../components/FeatureCard";
 import { SectionTitle } from "../components/SectionTitle";
 import { Icon } from "../components/Icon";
 import { Button } from "../components/Button";
-import type { Nav } from "../types";
 
-export function SecurityPage({ nav }: { nav: Nav }) {
+export function SecurityPage() {
+  const navigate = useNavigate();
   return (
     <main className="shell page">
       <PageHeader title="How we keep skills safe">
@@ -43,7 +44,7 @@ export function SecurityPage({ nav }: { nav: Nav }) {
           <h2>Report a problem</h2>
           <p>Tell us about suspicious behavior or a security issue.</p>
         </div>
-        <Button onClick={() => nav("/about")}>Contact security</Button>
+        <Button onClick={() => navigate("/about")}>Contact security</Button>
       </section>
     </main>
   );

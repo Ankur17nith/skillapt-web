@@ -1,14 +1,15 @@
+import { useNavigate } from "react-router-dom";
 import { Logo } from "../components/Logo";
 import { Button } from "../components/Button";
-import type { Nav } from "../types";
 
-export function NotFoundPage({ nav }: { nav: Nav }) {
+export function NotFoundPage() {
+  const navigate = useNavigate();
   return (
     <main className="not-found">
-      <Logo variant="mark" size={72} className="not-found-logo" />
+      <Logo variant="mark" size={72} className="not-found-logo" linked={false} />
       <div className="terminal nf">
         <div className="terminal-title">
-          <Logo variant="mark" size={14} />
+          <Logo variant="mark" size={14} linked={false} />
           Terminal
         </div>
         <div className="terminal-body">
@@ -20,7 +21,7 @@ export function NotFoundPage({ nav }: { nav: Nav }) {
       </div>
       <h1>404</h1>
       <p>The page you requested does not exist.</p>
-      <Button onClick={() => nav("/")}>Go home</Button>
+      <Button onClick={() => navigate("/")}>Go home</Button>
     </main>
   );
 }

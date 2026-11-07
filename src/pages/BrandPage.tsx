@@ -1,10 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import { PageHeader } from "../components/PageHeader";
 import { SectionTitle } from "../components/SectionTitle";
 import { Logo } from "../components/Logo";
 import { Button } from "../components/Button";
-import type { Nav } from "../types";
 
-export function BrandPage({ nav }: { nav: Nav }) {
+export function BrandPage() {
+  const navigate = useNavigate();
   return (
     <main className="shell page brand-page">
       <PageHeader title="Brand assets">
@@ -12,16 +13,16 @@ export function BrandPage({ nav }: { nav: Nav }) {
       </PageHeader>
       <section className="brand-logos">
         <div className="brand-sample light-sample">
-          <Logo variant="full" />
+          <Logo variant="full" linked={false} />
         </div>
         <div className="brand-sample dark-sample">
-          <Logo variant="full" />
+          <Logo variant="full" linked={false} />
         </div>
         <div className="brand-sample light-sample mark-sample">
-          <Logo variant="mark" size={64} />
+          <Logo variant="mark" size={64} linked={false} />
         </div>
         <div className="brand-sample dark-sample mark-sample">
-          <Logo variant="mark" size={64} />
+          <Logo variant="mark" size={64} linked={false} />
         </div>
         <div className="brand-sample light-sample monochrome-sample">
           <img src="/logo-monochrome.svg" alt="Single-color skillpm logo" />
@@ -32,15 +33,15 @@ export function BrandPage({ nav }: { nav: Nav }) {
           <h2>Clear space</h2>
           <p>Keep clear space equal to half the mark height on every side.</p>
           <div className="clear-space">
-            <Logo variant="mark" size={32} />
+            <Logo variant="mark" size={32} linked={false} />
           </div>
         </div>
         <div>
           <h2>Minimum size</h2>
           <p>Use the mark at 16px or larger and the full logo at 80px or larger.</p>
           <div className="minimum-size">
-            <Logo variant="mark" size={16} />
-            <Logo variant="full" size={20} />
+            <Logo variant="mark" size={16} linked={false} />
+            <Logo variant="full" size={20} linked={false} />
           </div>
         </div>
         <div>
@@ -81,31 +82,31 @@ export function BrandPage({ nav }: { nav: Nav }) {
         <div className="dont-grid">
           <div>
             <span className="dont-stretch">
-              <Logo variant="mark" size={40} />
+              <Logo variant="mark" size={40} linked={false} />
             </span>
             <p>Don't stretch</p>
           </div>
           <div>
             <span className="dont-recolor">
-              <Logo variant="mark" size={40} />
+              <Logo variant="mark" size={40} linked={false} />
             </span>
             <p>Don't recolor</p>
           </div>
           <div>
             <span className="dont-effects">
-              <Logo variant="mark" size={40} />
+              <Logo variant="mark" size={40} linked={false} />
             </span>
             <p>Don't add effects</p>
           </div>
           <div>
             <span className="dont-rotate">
-              <Logo variant="mark" size={40} />
+              <Logo variant="mark" size={40} linked={false} />
             </span>
             <p>Don't rotate</p>
           </div>
         </div>
       </section>
-      <Button onClick={() => nav("/")}>Back to home</Button>
+      <Button onClick={() => navigate("/")}>Back to home</Button>
     </main>
   );
 }

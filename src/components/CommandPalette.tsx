@@ -1,7 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { Icon } from "./Icon";
-import type { Nav } from "../types";
 
-export function CommandPalette({ close, nav }: { close: () => void; nav: Nav }) {
+export function CommandPalette({ close }: { close: () => void }) {
+  const navigate = useNavigate();
   const results = [
     ["Browse all skills", "/browse"],
     ["Browse categories", "/categories"],
@@ -23,14 +24,14 @@ export function CommandPalette({ close, nav }: { close: () => void; nav: Nav }) 
       >
         <div className="palette-search">
           <Icon name="search" />
-          <input autoFocus placeholder="Search skillpm..." />
+          <input autoFocus placeholder="Search skillpm..." aria-label="Search command palette" />
           <kbd>ESC</kbd>
         </div>
         {results.map(([label, path]) => (
           <button
             key={path}
             onClick={() => {
-              nav(path);
+              navigate(path);
               close();
             }}
           >

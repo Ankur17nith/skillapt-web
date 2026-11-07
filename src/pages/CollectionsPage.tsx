@@ -1,9 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import { PageHeader } from "../components/PageHeader";
 import { Icon } from "../components/Icon";
 import { collections } from "../data/initialData";
-import type { Nav } from "../types";
 
-export function CollectionsPage({ nav }: { nav: Nav }) {
+export function CollectionsPage() {
+  const navigate = useNavigate();
   return (
     <main className="shell page">
       <PageHeader title="Collections">
@@ -20,7 +21,7 @@ export function CollectionsPage({ nav }: { nav: Nav }) {
             <ul>
               {(names as string[]).map((name) => (
                 <li key={name}>
-                  <button onClick={() => nav("/skills/pdf-summarizer")}>
+                  <button onClick={() => navigate(`/skills/${name}`)}>
                     <Icon name="package" size={16} />
                     {name}
                     <Icon name="arrow" size={15} />

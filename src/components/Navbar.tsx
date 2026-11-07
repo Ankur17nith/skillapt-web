@@ -1,23 +1,22 @@
 import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Icon } from "./Icon";
-import { Link } from "./Link";
 import { Logo } from "./Logo";
 import { Button } from "./Button";
 import { ThemeToggle } from "./ThemeToggle";
-import type { Nav, Theme } from "../types";
+import type { Theme } from "../types";
 
 export function Navbar({
-  nav,
   theme,
   toggleTheme,
   openPalette,
 }: {
-  nav: Nav;
   theme: Theme;
   toggleTheme: () => void;
   openPalette: () => void;
 }) {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const items = [
     ["Home", "/"],
     ["Discover", "/browse"],
@@ -29,48 +28,60 @@ export function Navbar({
   return (
     <>
       <nav className="navbar">
-        <Logo variant="full" nav={nav} />
+        <Logo variant="full" />
         <div className="nav-links">
           {items.slice(1).map(([label, path]) => (
-            <Link key={path} to={path} nav={nav}>
+            <NavLink
+              key={path}
+              to={path}
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
               {label}
-            </Link>
+            </NavLink>
           ))}
         </div>
         <div className="nav-actions">
-          <button className="nav-search" onClick={openPalette}>
+          <button className="nav-search" onClick={openPalette} aria-label="Search skills">
             <Icon name="search" size={15} />
             Search <kbd>⌘K</kbd>
           </button>
-          <a className="icon-button" href="https://github.com" aria-label="GitHub">
+          <a
+            className="icon-button"
+            href="https://github.com/Ankur17nith/skillpm-web"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
+          >
             <Icon name="github" />
           </a>
           <ThemeToggle theme={theme} toggle={toggleTheme} />
-          <Button onClick={() => nav("/docs")}>Install CLI</Button>
+          <Button onClick={() => navigate("/docs")}>Install CLI</Button>
         </div>
-        <button className="mobile-menu-button" onClick={() => setOpen(true)}>
+        <button
+          className="mobile-menu-button"
+          onClick={() => setOpen(true)}
+          aria-label="Open mobile menu"
+        >
           <Icon name="menu" />
         </button>
       </nav>
       {open && (
-        <div className="full-menu">
+        <div className="full-menu" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
           <div>
-            <Logo variant="mark" nav={nav} />
-            <button onClick={() => setOpen(false)}>
+            <Logo variant="mark" />
+            <button onClick={() => setOpen(false)} aria-label="Close mobile menu">
               <Icon name="x" />
             </button>
           </div>
           {items.map(([label, path]) => (
-            <Link
+            <NavLink
               key={path}
               to={path}
-              nav={(p) => {
-                nav(p);
-                setOpen(false);
-              }}
+              onClick={() => setOpen(false)}
+              className={({ isActive }) => (isActive ? "active" : "")}
             >
               {label}
-            </Link>
+            </NavLink>
           ))}
           <ThemeToggle theme={theme} toggle={toggleTheme} />
         </div>

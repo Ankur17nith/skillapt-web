@@ -2,9 +2,8 @@ import { PageHeader } from "../components/PageHeader";
 import { Link } from "../components/Link";
 import { Icon } from "../components/Icon";
 import { categoryDescriptions } from "../data/initialData";
-import type { Nav } from "../types";
 
-export function CategoriesPage({ nav }: { nav: Nav }) {
+export function CategoriesPage() {
   return (
     <main className="shell page">
       <PageHeader title="Categories">
@@ -12,7 +11,7 @@ export function CategoriesPage({ nav }: { nav: Nav }) {
       </PageHeader>
       <div className="category-directory">
         {Object.entries(categoryDescriptions).map(([name, description]) => (
-          <Link key={name} to="/browse" nav={nav}>
+          <Link key={name} to={`/browse?category=${name.toLowerCase()}`}>
             <span>
               <Icon
                 name={name === "Security" ? "shield" : name === "Coding" ? "code" : "package"}

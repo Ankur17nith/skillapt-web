@@ -7,9 +7,8 @@ import { SkillListItem } from "../components/SkillListItem";
 import { SkillCard } from "../components/SkillCard";
 import { Button } from "../components/Button";
 import { skills } from "../data/initialData";
-import type { Nav } from "../types";
 
-export function BrowsePage({ nav }: { nav: Nav; openPalette: () => void }) {
+export function BrowsePage() {
   const [sheet, setSheet] = useState(false);
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("");
@@ -114,13 +113,13 @@ export function BrowsePage({ nav }: { nav: Nav; openPalette: () => void }) {
           ) : view === "list" ? (
             <div className="skill-list">
               {results.map((skill) => (
-                <SkillListItem key={skill.name} skill={skill} nav={nav} />
+                <SkillListItem key={skill.name} skill={skill} />
               ))}
             </div>
           ) : (
             <div className="card-grid">
               {results.map((skill) => (
-                <SkillCard key={skill.name} skill={skill} nav={nav} />
+                <SkillCard key={skill.name} skill={skill} />
               ))}
             </div>
           )}

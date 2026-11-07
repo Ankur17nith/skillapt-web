@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { Link } from "../components/Link";
 import { Icon } from "../components/Icon";
 import { Logo } from "../components/Logo";
@@ -9,29 +10,31 @@ import { ReportModal } from "../components/ReportModal";
 import { SectionTitle } from "../components/SectionTitle";
 import { SkillCard } from "../components/SkillCard";
 import { skills } from "../data/initialData";
-import type { Nav } from "../types";
 
-export function SkillDetailPage({ nav, notify }: { nav: Nav; notify: () => void }) {
+export function SkillDetailPage({ notify }: { notify?: () => void }) {
+  const { slug } = useParams<{ slug: string }>();
+  const skill = skills.find((s) => s.name === slug) || skills[0];
   const [tab, setTab] = useState("README");
   const [installMode, setInstallMode] = useState("skillpm");
   const [report, setReport] = useState(false);
+
+  const skillName = skill.name;
+  const authorName = skill.author;
+
   const installCommands: Record<string, string> = {
-    skillpm: "skillpm install paperplane/pdf-summarizer",
-    npx: "npx skillpm install paperplane/pdf-summarizer",
-    manual: "git clone github.com/paperplane/pdf-summarizer",
+    skillpm: `skillpm install ${authorName}/${skillName}`,
+    npx: `npx skillpm install ${authorName}/${skillName}`,
+    manual: `git clone github.com/${authorName}/${skillName}`,
   };
+
   return (
     <main className="shell page">
       <div className="breadcrumbs">
-        <Link to="/" nav={nav}>
-          Home
-        </Link>
+        <Link to="/">Home</Link>
         <span>/</span>
-        <Link to="/browse" nav={nav}>
-          Browse
-        </Link>
+        <Link to="/browse">Browse</Link>
         <span>/</span>
-        <span>pdf-summarizer</span>
+        <span>{skillName}</span>
       </div>
       <div className="detail-grid">
         <article className="detail-main">
@@ -41,23 +44,21 @@ export function SkillDetailPage({ nav, notify }: { nav: Nav; notify: () => void 
             </span>
             <div>
               <div>
-                <h1>pdf-summarizer</h1>
+                <h1>{skillName}</h1>
               </div>
-              <p>by @paperplane</p>
+              <p>by @{authorName}</p>
             </div>
           </div>
-          <p className="lead">
-            Extract, summarize, and query any PDF with citations and page-level references.
-          </p>
+          <p className="lead">{skill.description}</p>
           <div className="tags">
-            <span>documents</span>
-            <span>research</span>
-            <span>pdf</span>
+            {skill.tags.map((tag) => (
+              <span key={tag}>{tag}</span>
+            ))}
           </div>
           <dl className="metadata">
             <div>
               <dt>Version</dt>
-              <dd>2.4.1</dd>
+              <dd>{skill.version}</dd>
             </div>
             <div>
               <dt>Last updated</dt>
@@ -78,13 +79,10 @@ export function SkillDetailPage({ nav, notify }: { nav: Nav; notify: () => void 
           {tab === "README" && (
             <div className="markdown">
               <Logo variant="full" />
-              <h2>PDF Summarizer</h2>
-              <p>
-                Give your agent a reliable way to read long PDF files and return structured
-                summaries with citations.
-              </p>
+              <h2>{skillName.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ")}</h2>
+              <p>{skill.description}</p>
               <h3>Installation</h3>
-              <CodeBlock>skillpm install paperplane/pdf-summarizer</CodeBlock>
+              <CodeBlock>{`skillpm install ${authorName}/${skillName}`}</CodeBlock>
               <h3>What it can do</h3>
               <ul>
                 <li>Extract text from local and remote PDF files</li>
@@ -92,13 +90,13 @@ export function SkillDetailPage({ nav, notify }: { nav: Nav; notify: () => void 
                 <li>Answer questions using only the supplied document</li>
               </ul>
               <h3>Usage</h3>
-              <CodeBlock>{`agent.use("pdf-summarizer", {\n  file: "./annual-report.pdf",\n  format: "brief"\n})`}</CodeBlock>
+              <CodeBlock>{`agent.use("${skillName}", {\n  file: "./annual-report.pdf",\n  format: "brief"\n})`}</CodeBlock>
             </div>
           )}
           {tab === "Versions" && (
             <div className="tab-panel">
               <h2>Version history</h2>
-              <p>2.4.1 — Improved citation accuracy and large-file handling.</p>
+              <p>{skill.version} — Improved citation accuracy and large-file handling.</p>
             </div>
           )}
           {tab === "Security" && (
@@ -137,8 +135,8 @@ export function SkillDetailPage({ nav, notify }: { nav: Nav; notify: () => void 
               </button>
             ))}
           </div>
-          <CopyCommand command={installCommands[installMode]} notify={notify} />
-          <Button onClick={() => window.open("https://github.com", "_blank")}>
+          <CopyCommand command={installCommands[installMode]} notify={notify || (() => {})} />
+          <Button onClick={() => window.open(`https://github.com/${authorName}/${skillName}`, "_blank")}>
             View on GitHub
           </Button>
           <Button variant="ghost" onClick={() => setReport(true)}>
@@ -147,7 +145,7 @@ export function SkillDetailPage({ nav, notify }: { nav: Nav; notify: () => void 
           <dl className="package-facts">
             <div>
               <dt>Version</dt>
-              <dd>2.4.1</dd>
+              <dd>{skill.version}</dd>
             </div>
             <div>
               <dt>License</dt>
@@ -155,11 +153,11 @@ export function SkillDetailPage({ nav, notify }: { nav: Nav; notify: () => void 
             </div>
             <div>
               <dt>Language</dt>
-              <dd>TypeScript</dd>
+              <dd>{skill.language}</dd>
             </div>
             <div>
               <dt>Repository</dt>
-              <dd>paperplane/pdf-summarizer</dd>
+              <dd>{authorName}/{skillName}</dd>
             </div>
             <div>
               <dt>Dependencies</dt>
@@ -168,23 +166,28 @@ export function SkillDetailPage({ nav, notify }: { nav: Nav; notify: () => void 
           </dl>
           <div className="compatibility">
             <strong>Compatibility</strong>
-            <span>Claude</span>
-            <span>Cursor</span>
-            <span>Codex</span>
+            {skill.compatibility.map((c) => (
+              <span key={c}>{c}</span>
+            ))}
           </div>
         </aside>
       </div>
       <section className="related">
         <SectionTitle title="Related skills" />
         <div className="card-grid">
-          {skills.slice(1, 4).map((s) => (
-            <SkillCard key={s.name} skill={s} nav={nav} />
-          ))}
+          {skills
+            .filter((s) => s.name !== skillName)
+            .slice(0, 3)
+            .map((s) => (
+              <SkillCard key={s.name} skill={s} />
+            ))}
         </div>
       </section>
       <div className="mobile-install">
-        <CopyCommand command="skillpm install paperplane/pdf-summarizer" notify={notify} />
-        <Button onClick={() => window.open("https://github.com", "_blank")}>View on GitHub</Button>
+        <CopyCommand command={`skillpm install ${authorName}/${skillName}`} notify={notify || (() => {})} />
+        <Button onClick={() => window.open(`https://github.com/${authorName}/${skillName}`, "_blank")}>
+          View on GitHub
+        </Button>
       </div>
       {report && <ReportModal close={() => setReport(false)} />}
     </main>

@@ -1,30 +1,21 @@
 import type { ReactNode } from "react";
-import type { Nav } from "../types";
+import { Link as RouterLink, type LinkProps } from "react-router-dom";
 
 export function Link({
   to,
-  nav,
   children,
   className = "",
   label,
+  ...props
 }: {
   to: string;
-  nav: Nav;
   children: ReactNode;
   className?: string;
   label?: string;
-}) {
+} & Omit<LinkProps, "to">) {
   return (
-    <a
-      href={to}
-      className={className}
-      aria-label={label}
-      onClick={(e) => {
-        e.preventDefault();
-        nav(to);
-      }}
-    >
+    <RouterLink to={to} className={className} aria-label={label} {...props}>
       {children}
-    </a>
+    </RouterLink>
   );
 }

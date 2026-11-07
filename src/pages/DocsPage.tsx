@@ -1,6 +1,5 @@
 import { Logo } from "../components/Logo";
 import { CodeBlock } from "../components/CodeBlock";
-import type { Nav } from "../types";
 
 const docSections = [
   "Getting started",
@@ -10,11 +9,11 @@ const docSections = [
   "FAQ",
 ];
 
-export function DocsPage({ nav }: { nav: Nav }) {
+export function DocsPage() {
   return (
     <main className="docs-layout">
       <aside className="docs-nav">
-        <Logo variant="full" nav={nav} />
+        <Logo variant="full" />
         <strong>Documentation</strong>
         {docSections.map((s) => (
           <a href={`#${s.replaceAll(" ", "-")}`} key={s}>

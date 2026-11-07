@@ -1,16 +1,15 @@
 import { Link } from "./Link";
-import type { Nav } from "../types";
 
 export function Logo({
   variant = "full",
   size = 32,
-  nav,
   className = "",
+  linked = true,
 }: {
   variant?: "full" | "mark";
   size?: number;
-  nav?: Nav;
   className?: string;
+  linked?: boolean;
 }) {
   const width = variant === "full" ? size * 4.15 : size;
   const artwork = (
@@ -42,8 +41,8 @@ export function Logo({
       )}
     </svg>
   );
-  return nav ? (
-    <Link to="/" nav={nav} className={`logo ${className}`} label="skillpm home">
+  return linked ? (
+    <Link to="/" className={`logo ${className}`} label="skillpm home">
       {artwork}
     </Link>
   ) : (
