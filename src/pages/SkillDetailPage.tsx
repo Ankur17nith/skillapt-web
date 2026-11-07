@@ -369,6 +369,8 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
         </div>
         {reportOpen && (
           <ReportModal
+            skillName={skill.name}
+            version={version}
             close={() => setReportOpen(false)}
             onSubmit={handleReportSubmit}
           />
