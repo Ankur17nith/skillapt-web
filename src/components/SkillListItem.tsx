@@ -1,10 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { Icon } from "./Icon";
+import { formatRelativeTime, getSkillLanguage } from "../lib/skills";
 import type { Skill } from "../types";
 
 export function SkillListItem({ skill }: { skill: Skill }) {
   const navigate = useNavigate();
-  const slug = (skill as any).slug || skill.name;
+  const slug = skill.slug || skill.name;
+  const version = skill.version || skill.ref.replace(/^v/, "");
+  const updatedText = skill.updatedAt ? formatRelativeTime(skill.updatedAt) : skill.updated;
+  const lang = getSkillLanguage(skill);
+
   return (
     <article className="skill-list-item">
       <button className="skill-list-main" onClick={() => navigate(`/skills/${slug}`)}>
@@ -18,10 +23,10 @@ export function SkillListItem({ skill }: { skill: Skill }) {
         <p>{skill.description}</p>
       </button>
       <div className="skill-list-details">
-        <code>v{skill.version}</code>
-        <span>{skill.language}</span>
+        <code>v{version}</code>
+        <span>{lang}</span>
         <span>{skill.compatibility.join(", ")}</span>
-        <span>Updated {skill.updated}</span>
+        <span>Updated {updatedText}</span>
       </div>
     </article>
   );

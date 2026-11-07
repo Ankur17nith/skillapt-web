@@ -1,10 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import { Icon } from "./Icon";
+import { formatRelativeTime, getSkillLanguage } from "../lib/skills";
 import type { Skill } from "../types";
 
 export function SkillCard({ skill, hover = false }: { skill: Skill; hover?: boolean }) {
   const navigate = useNavigate();
-  const slug = (skill as any).slug || skill.name;
+  const slug = skill.slug || skill.name;
+  const version = skill.version || skill.ref.replace(/^v/, "");
+  const updatedText = skill.updatedAt ? formatRelativeTime(skill.updatedAt) : skill.updated;
+  const lang = getSkillLanguage(skill);
+
   return (
     <article
       className={`skill-card ${hover ? "hover-example" : ""}`}
@@ -19,7 +24,7 @@ export function SkillCard({ skill, hover = false }: { skill: Skill; hover?: bool
         <span className="skill-icon">
           <Icon name="package" />
         </span>
-        <code>v{skill.version}</code>
+        <code>v{version}</code>
       </div>
       <h3>{skill.name}</h3>
       <span className="author">by @{skill.author}</span>
@@ -30,9 +35,9 @@ export function SkillCard({ skill, hover = false }: { skill: Skill; hover?: bool
         ))}
       </div>
       <div className="skill-meta">
-        <span>{skill.language}</span>
+        <span>{lang}</span>
         <span>{skill.compatibility.join(" · ")}</span>
-        <span>{skill.updated}</span>
+        <span>{updatedText}</span>
       </div>
     </article>
   );

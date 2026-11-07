@@ -91,6 +91,32 @@ export function sortSkills(skillsList: Skill[], sort: SortOption | string): Skil
   }
 }
 
+export function formatRelativeTime(dateStr: string): string {
+  try {
+    const date = new Date(dateStr);
+    const now = new Date("2025-05-26T12:00:00Z");
+    const diffMs = now.getTime() - date.getTime();
+    const diffDays = Math.max(1, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+    if (diffDays === 1) return "yesterday";
+    if (diffDays < 7) return `${diffDays} days ago`;
+    const diffWeeks = Math.floor(diffDays / 7);
+    if (diffWeeks === 1) return "1 week ago";
+    if (diffWeeks < 4) return `${diffWeeks} weeks ago`;
+    const diffMonths = Math.floor(diffDays / 30);
+    return `${diffMonths} months ago`;
+  } catch {
+    return dateStr;
+  }
+}
+
+export function getSkillLanguage(skill: Skill): string {
+  if ((skill as any).language) return (skill as any).language;
+  const lowerTags = skill.tags.map((t) => t.toLowerCase());
+  if (lowerTags.includes("python") || skill.name.includes("sql") || skill.name.includes("csv")) return "Python";
+  if (lowerTags.includes("markdown") || skill.name.includes("copywriter")) return "Markdown";
+  return "TypeScript";
+}
+
 export function getRegistryStats() {
   const all = getSkills();
   const totalSkills = all.length;

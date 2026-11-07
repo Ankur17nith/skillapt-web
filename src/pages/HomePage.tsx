@@ -10,12 +10,24 @@ import { StepCard } from "../components/StepCard";
 import { FeatureCard } from "../components/FeatureCard";
 import { Button } from "../components/Button";
 import { FAQ } from "../components/FAQ";
-import { skills } from "../data/initialData";
+import { getSkills, sortSkills } from "../lib/skills";
 
 export function HomePage({ notify }: { notify?: () => void }) {
   const navigate = useNavigate();
   const outletCtx = useOutletContext<{ openPalette?: () => void } | null>();
   const openPalette = outletCtx?.openPalette || (() => {});
+  const recentlyUpdated = sortSkills(getSkills(), "Recently updated").slice(0, 5);
+
+  const categories = [
+    "Documents",
+    "Coding",
+    "Data",
+    "Design",
+    "Writing",
+    "Research",
+    "Automation",
+    "Security",
+  ];
 
   return (
     <>
@@ -45,25 +57,16 @@ export function HomePage({ notify }: { notify?: () => void }) {
             action={<Link to="/browse">View all</Link>}
           />
           <div className="skill-list home-skill-list">
-            {skills.slice(0, 5).map((s) => (
-              <SkillListItem key={s.name} skill={s} />
+            {recentlyUpdated.map((s) => (
+              <SkillListItem key={s.slug || s.name} skill={s} />
             ))}
           </div>
         </section>
         <section>
           <SectionTitle title="Browse by category" />
           <div className="category-grid">
-            {[
-              "Documents",
-              "Coding",
-              "Data",
-              "Design",
-              "Writing",
-              "Research",
-              "Automation",
-              "Security",
-            ].map((c) => (
-              <Link key={c} to="/categories">
+            {categories.map((c) => (
+              <Link key={c} to={`/browse?category=${encodeURIComponent(c.toLowerCase())}`}>
                 <Icon name={c === "Security" ? "shield" : c === "Coding" ? "code" : "package"} />
                 <span>{c}</span>
               </Link>
