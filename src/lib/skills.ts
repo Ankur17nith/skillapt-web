@@ -131,3 +131,47 @@ export function getRegistryStats() {
     verifiedCount,
   };
 }
+
+export function apiSummaryToSkill(summary: import("./api").ApiSkillSummary): Skill {
+  return {
+    name: summary.name,
+    slug: summary.name,
+    description: summary.description,
+    longDescription: summary.description,
+    repo: `${summary.owner.handle}/${summary.name}`,
+    author: summary.owner.handle,
+    tags: [summary.category, ...summary.compatibility],
+    category: summary.category.charAt(0).toUpperCase() + summary.category.slice(1),
+    ref: `v${summary.latestVersion}`,
+    version: summary.latestVersion,
+    stars: summary.stars || 0,
+    installs: summary.downloads,
+    verified: summary.verified,
+    compatibility: summary.compatibility,
+    license: summary.license,
+    updatedAt: summary.updatedAt,
+    readmeMarkdown: "",
+  };
+}
+
+export function apiDetailToSkill(detail: import("./api").ApiSkillDetail): Skill {
+  return {
+    name: detail.name,
+    slug: detail.name,
+    description: detail.description,
+    longDescription: detail.description,
+    repo: detail.repository?.replace("https://github.com/", "") || `${detail.owner.handle}/${detail.name}`,
+    author: detail.owner.handle,
+    tags: detail.keywords && detail.keywords.length > 0 ? detail.keywords : [detail.category, ...detail.compatibility],
+    category: detail.category.charAt(0).toUpperCase() + detail.category.slice(1),
+    ref: `v${detail.latestVersion}`,
+    version: detail.latestVersion,
+    stars: detail.stars || 0,
+    installs: detail.downloads,
+    verified: true,
+    compatibility: detail.compatibility,
+    license: detail.license,
+    updatedAt: detail.updatedAt,
+    readmeMarkdown: detail.readme || "",
+  };
+}
