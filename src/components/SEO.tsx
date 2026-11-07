@@ -16,7 +16,7 @@ export function SEO({
   url = "/",
   type = "website",
 }: SEOProps) {
-  const fullTitle = title ? `${title} | skillpm` : "The package manager for AI skills | skillpm";
+  const fullTitle = title ? `${title} | ${CONFIG.SITE_NAME}` : `The package manager for AI agent skills | ${CONFIG.SITE_NAME}`;
   const canonicalUrl = `${CONFIG.SITE_URL}${url.startsWith("/") ? url : `/${url}`}`;
   const fullImage = image.startsWith("http") ? image : `${CONFIG.SITE_URL}${image.startsWith("/") ? image : `/${image}`}`;
 

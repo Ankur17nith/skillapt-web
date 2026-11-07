@@ -6,7 +6,9 @@ const routeTitles: Record<string, string> = {
   "/browse": "Browse skills",
   "/categories": "Categories",
   "/collections": "Collections",
-  "/submit": "Submit a skill",
+  "/submit": "Publish a skill",
+  "/publish": "Publish a skill",
+  "/dashboard": "Publisher Dashboard",
   "/docs": "Docs",
   "/security": "Security",
   "/about": "About",
@@ -28,7 +30,7 @@ export function DocumentTitle() {
         title = "Page not found";
       }
     }
-    document.title = `${title} | skillpm`;
+    document.title = `${title} | skillapt`;
   }, [pathname]);
 
   return null;

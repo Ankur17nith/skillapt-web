@@ -5,6 +5,7 @@ import { Logo } from "./Logo";
 import { Button } from "./Button";
 import { ThemeToggle } from "./ThemeToggle";
 import { Container } from "./Container";
+import { CONFIG } from "../config";
 import type { Theme } from "../types";
 
 export function Navbar({
@@ -23,7 +24,7 @@ export function Navbar({
     ["Discover", "/browse"],
     ["Categories", "/categories"],
     ["Collections", "/collections"],
-    ["Publish", "/submit"],
+    ["Publish", "/publish"],
     ["Documentation", "/docs"],
   ];
   return (
@@ -49,7 +50,7 @@ export function Navbar({
             </button>
             <a
               className="icon-button"
-              href="https://github.com/Ankur17nith/skillpm-web"
+              href={CONFIG.GITHUB_URL}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"

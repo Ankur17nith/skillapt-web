@@ -15,7 +15,7 @@ export interface ToastData {
 
 const getInitialTheme = (): Theme => {
   if (typeof window !== "undefined") {
-    const saved = localStorage.getItem("skillpm-theme") as Theme | null;
+    const saved = (localStorage.getItem("skillapt-theme") || localStorage.getItem("skillpm-theme")) as Theme | null;
     if (saved === "light" || saved === "dark") return saved;
     if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
   }
@@ -39,7 +39,7 @@ export function Layout() {
     const nextTheme: Theme = theme === "light" ? "dark" : "light";
     setTheme(nextTheme);
     try {
-      localStorage.setItem("skillpm-theme", nextTheme);
+      localStorage.setItem("skillapt-theme", nextTheme);
       document.documentElement.setAttribute("data-theme", nextTheme);
     } catch (e) {}
   };
@@ -49,7 +49,7 @@ export function Layout() {
 
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const listener = (e: MediaQueryListEvent) => {
-      if (!localStorage.getItem("skillpm-theme")) {
+      if (!localStorage.getItem("skillapt-theme") && !localStorage.getItem("skillpm-theme")) {
         const nextTheme: Theme = e.matches ? "dark" : "light";
         setTheme(nextTheme);
         document.documentElement.setAttribute("data-theme", nextTheme);

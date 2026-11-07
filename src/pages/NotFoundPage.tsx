@@ -16,9 +16,9 @@ export function NotFoundPage() {
           </div>
           <div className="terminal-body">
             <p>
-              <span>$</span> skillpm open /missing-page
+              <span>$</span> skillapt open /missing-page
             </p>
-            <p>skillpm: command not found</p>
+            <p>skillapt: command not found</p>
           </div>
         </div>
         <h1>404</h1>

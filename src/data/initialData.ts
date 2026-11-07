@@ -99,7 +99,7 @@ export const faqs = [
     "A skill is a portable package of instructions, tools, and context that gives an AI agent a specific capability.",
   ],
   [
-    "Which agents does skillpm support?",
+    "Which agents does skillapt support?",
     "Skills can declare support for Claude, Cursor, Codex, and other compatible runtimes.",
   ],
   [
@@ -108,10 +108,10 @@ export const faqs = [
   ],
   [
     "Can I publish my own skill?",
-    "Yes. Add a SKILL.md file to a public repository and submit it for review.",
+    "Yes. Package your skill with skill.json and SKILL.md and publish using the skillapt CLI.",
   ],
   [
-    "Is skillpm open source?",
+    "Is skillapt open source?",
     "The CLI, specification, and registry tooling are developed in public.",
   ],
 ];

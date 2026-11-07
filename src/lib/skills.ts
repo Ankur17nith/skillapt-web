@@ -27,8 +27,8 @@ export function getCategories(): string[] {
 }
 
 export function getInstallCommand(skill: Skill): string {
-  const sub = skill.subpath ? `/${skill.subpath}` : "";
-  return `skillpm install ${skill.repo}${sub}`;
+  const name = skill.name || skill.slug;
+  return `skillapt install ${name}`;
 }
 
 export function filterSkills(skillsList: Skill[], filters: FilterOptions): Skill[] {

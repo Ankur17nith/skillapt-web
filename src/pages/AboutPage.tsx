@@ -7,14 +7,14 @@ export function AboutPage() {
     <main className="page">
       <Container>
         <div className="narrow">
-          <PageHeader title="About skillpm">
+          <PageHeader title="About skillapt">
             <p>We make useful agent capabilities easier to find, inspect, and share.</p>
           </PageHeader>
       <section>
         <h2>Our mission</h2>
         <p>
           AI agents are becoming part of everyday development work. Skills should be portable,
-          understandable, and safe to install. skillpm provides a public specification and registry
+          understandable, and safe to install. skillapt provides an independent specification and registry
           for that work.
         </p>
       </section>
@@ -26,7 +26,7 @@ export function AboutPage() {
         </p>
         <Button
           onClick={() => {
-            window.location.href = "mailto:hello@skillpm.dev";
+            window.location.href = "mailto:hello@skillapt.dev";
           }}
         >
           Contact us

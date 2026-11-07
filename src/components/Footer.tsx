@@ -1,6 +1,7 @@
 import { Logo } from "./Logo";
 import { Link } from "./Link";
 import { Container } from "./Container";
+import { CONFIG } from "../config";
 
 export function Footer() {
   const groups = [
@@ -10,12 +11,12 @@ export function Footer() {
       ["Categories", "/categories"],
       ["Collections", "/collections"],
     ],
-    ["Developers", ["Publish", "/submit"], ["Documentation", "/docs"], ["Security", "/security"]],
+    ["Developers", ["Publish", "/publish"], ["Documentation", "/docs"], ["Security", "/security"]],
     [
       "Project",
       ["About", "/about"],
       ["Brand assets", "/brand"],
-      ["GitHub", "https://github.com/Ankur17nith/skillpm-web"],
+      ["GitHub", CONFIG.GITHUB_URL],
     ],
   ] as const;
   return (
@@ -44,7 +45,7 @@ export function Footer() {
           ))}
         </div>
         <div className="footer-bottom">
-          <span>© 2025 skillpm. Open source.</span>
+          <span>© 2026 {CONFIG.NAME}. Open source.</span>
           <span>Built for reusable agent skills.</span>
         </div>
       </Container>

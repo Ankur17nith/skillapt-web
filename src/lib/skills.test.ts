@@ -29,14 +29,12 @@ describe("Skills Registry & Helpers", () => {
     expect(nonExistent).toBeUndefined();
   });
 
-  it("generates correct install command including subpath", () => {
+  it("generates correct install command", () => {
     const pdf = getSkillBySlug("pdf-summarizer");
-    expect(getInstallCommand(pdf!)).toBe("skillpm install paperplane/pdf-summarizer");
+    expect(getInstallCommand(pdf!)).toBe("skillapt install pdf-summarizer");
 
     const tokenSync = getSkillBySlug("design-token-sync");
-    expect(getInstallCommand(tokenSync!)).toBe(
-      "skillpm install figma-dev/design-token-sync/packages/sync"
-    );
+    expect(getInstallCommand(tokenSync!)).toBe("skillapt install design-token-sync");
   });
 
   it("retrieves distinct categories", () => {

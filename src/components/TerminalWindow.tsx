@@ -9,7 +9,7 @@ export function TerminalWindow() {
       </div>
       <div className="terminal-body">
         <p>
-          <span>$</span> skillpm install pdf-summarizer
+          <span>$</span> skillapt install pdf-summarizer
         </p>
         <p className="muted">Resolving skill manifest...</p>
         <p className="muted">Verifying publisher signature...</p>

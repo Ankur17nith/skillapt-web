@@ -11,7 +11,7 @@ export function BrandPage() {
     <main className="page brand-page">
       <Container>
         <PageHeader title="Brand assets">
-          <p>Logo files and usage guidance for skillpm.</p>
+          <p>Logo files and usage guidance for skillapt.</p>
         </PageHeader>
       <section className="brand-logos">
         <div className="brand-sample light-sample">
@@ -27,7 +27,7 @@ export function BrandPage() {
           <Logo variant="mark" size={64} linked={false} />
         </div>
         <div className="brand-sample light-sample monochrome-sample">
-          <img src="/logo-monochrome.svg" alt="Single-color skillpm logo" />
+          <img src="/logo-monochrome.svg" alt="Single-color skillapt logo" />
         </div>
       </section>
       <section className="brand-rules">

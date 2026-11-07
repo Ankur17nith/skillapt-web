@@ -22,7 +22,7 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
   const notify = propNotify || outletCtx?.notify || (() => {});
 
   const [tab, setTab] = useState("README");
-  const [installMode, setInstallMode] = useState<"skillpm" | "npx" | "manual">("skillpm");
+  const [installMode, setInstallMode] = useState<"skillapt" | "curl" | "manual">("skillapt");
   const [reportOpen, setReportOpen] = useState(false);
 
   if (!slug) {
@@ -40,8 +40,8 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
   const installCmd = getInstallCommand(skill);
 
   const installCommands: Record<string, string> = {
-    skillpm: installCmd,
-    npx: `npx ${installCmd}`,
+    skillapt: installCmd,
+    curl: `curl -fsSL https://registry.skillapt.dev/v1/skills/${skill.name || skill.slug}/-/${version}.tgz -o skill.tgz`,
     manual: `git clone https://github.com/${skill.repo}.git`,
   };
 
@@ -143,8 +143,9 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
                     const text = String(children).replace(/\n$/, "");
                     if (
                       text.includes("\n") ||
+                      text.startsWith("skillapt") ||
                       text.startsWith("skillpm") ||
-                      text.startsWith("npx") ||
+                      text.startsWith("curl") ||
                       text.startsWith("agent.use")
                     ) {
                       return <CodeBlock>{text}</CodeBlock>;
@@ -200,7 +201,7 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
         </article>
         <aside className="install-panel">
           <div className="mini-tabs">
-            {(["skillpm", "npx", "manual"] as const).map((mode) => (
+            {(["skillapt", "curl", "manual"] as const).map((mode) => (
               <button
                 className={installMode === mode ? "active" : ""}
                 onClick={() => setInstallMode(mode)}
@@ -268,7 +269,7 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
       )}
       <div className="mobile-install">
         <CopyCommand
-          command={installCommands.skillpm}
+          command={installCommands.skillapt}
           notify={() => notify("Copied to clipboard", "Install command copied.")}
         />
         <Button

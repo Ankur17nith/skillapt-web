@@ -53,6 +53,7 @@ export function DocsPage() {
               if (
                 text.includes("\n") ||
                 text.startsWith("npm") ||
+                text.startsWith("skillapt") ||
                 text.startsWith("skillpm") ||
                 text.startsWith("git")
               ) {

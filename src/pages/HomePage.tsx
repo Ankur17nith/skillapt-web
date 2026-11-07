@@ -41,7 +41,7 @@ export function HomePage({ notify }: { notify?: () => void }) {
             <h1>Your AI skills, one package away.</h1>
             <p>Discover, install, and share reusable skills for the AI agents you build with.</p>
             <SearchBar openPalette={openPalette} />
-            <CopyCommand command="npx skillpm install user/repo" notify={notify || (() => {})} />
+            <CopyCommand command="skillapt install pdf-summarizer" notify={notify || (() => {})} />
             <div className="hero-actions">
               <Button onClick={() => navigate("/browse")}>Browse skills</Button>
               <Link to="/docs" className="hero-docs">

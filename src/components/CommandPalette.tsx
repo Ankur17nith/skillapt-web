@@ -114,8 +114,8 @@ export function CommandPalette({ close }: { close: () => void }) {
             ref={inputRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search skillpm..."
-            aria-label="Search skillpm commands and skills"
+            placeholder="Search skillapt..."
+            aria-label="Search skillapt commands and skills"
           />
           <kbd>ESC</kbd>
         </div>

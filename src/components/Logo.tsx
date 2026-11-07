@@ -19,7 +19,7 @@ export function Logo({
       height={size}
       viewBox={variant === "full" ? "0 0 133 32" : "0 0 32 32"}
       role="img"
-      aria-label="skillpm"
+      aria-label="skillapt"
     >
       <rect x="5" y="4" width="22" height="6" rx="3" fill="currentColor" />
       <rect x="5" y="8" width="6" height="8" rx="3" fill="currentColor" />
@@ -36,17 +36,17 @@ export function Logo({
           fontWeight="600"
           letterSpacing="-0.26"
         >
-          skillpm
+          skillapt
         </text>
       )}
     </svg>
   );
   return linked ? (
-    <Link to="/" className={`logo ${className}`} label="skillpm home">
+    <Link to="/" className={`logo ${className}`} label="skillapt home">
       {artwork}
     </Link>
   ) : (
-    <span className={`logo ${className}`} aria-label="skillpm">
+    <span className={`logo ${className}`} aria-label="skillapt">
       {artwork}
     </span>
   );
