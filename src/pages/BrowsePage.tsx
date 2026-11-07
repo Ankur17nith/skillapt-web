@@ -8,6 +8,7 @@ import { LoadingState } from "../components/LoadingState";
 import { SkillListItem } from "../components/SkillListItem";
 import { SkillCard } from "../components/SkillCard";
 import { Button } from "../components/Button";
+import { SEO } from "../components/SEO";
 import { getSkills, filterSkills, sortSkills } from "../lib/skills";
 
 const ITEMS_PER_PAGE = 12;
@@ -81,6 +82,7 @@ export function BrowsePage() {
 
   return (
     <main className="shell page">
+      <SEO title="Browse skills" description="Explore verified AI agent capabilities across categories." url="/browse" />
       <PageHeader title="Browse skills">
         <span>{allSkills.length} packages</span>
       </PageHeader>

@@ -10,6 +10,7 @@ import { StepCard } from "../components/StepCard";
 import { FeatureCard } from "../components/FeatureCard";
 import { Button } from "../components/Button";
 import { FAQ } from "../components/FAQ";
+import { SEO } from "../components/SEO";
 import { getSkills, sortSkills } from "../lib/skills";
 
 export function HomePage({ notify }: { notify?: () => void }) {
@@ -31,6 +32,7 @@ export function HomePage({ notify }: { notify?: () => void }) {
 
   return (
     <>
+      <SEO title="Home" description="Discover, install, and share capabilities for AI agents." url="/" />
       <section className="home-hero">
         <div className="hero-grid">
           <div>
