@@ -10,6 +10,7 @@ const CategoriesPage = lazy(() => import("./pages/CategoriesPage").then((m) => (
 const CollectionsPage = lazy(() => import("./pages/CollectionsPage").then((m) => ({ default: m.CollectionsPage })));
 const SkillDetailPage = lazy(() => import("./pages/SkillDetailPage").then((m) => ({ default: m.SkillDetailPage })));
 const SubmitPage = lazy(() => import("./pages/SubmitPage").then((m) => ({ default: m.SubmitPage })));
+const PublishGuidePage = lazy(() => import("./pages/PublishGuidePage").then((m) => ({ default: m.PublishGuidePage })));
 const DocsPage = lazy(() => import("./pages/DocsPage").then((m) => ({ default: m.DocsPage })));
 const SecurityPage = lazy(() => import("./pages/SecurityPage").then((m) => ({ default: m.SecurityPage })));
 const AboutPage = lazy(() => import("./pages/AboutPage").then((m) => ({ default: m.AboutPage })));
@@ -44,6 +45,7 @@ export default function App() {
                 <Route path="/collections" element={<CollectionsPage />} />
                 <Route path="/skills/:slug" element={<SkillDetailPage />} />
                 <Route path="/submit" element={<SubmitPage />} />
+                <Route path="/publish" element={<PublishGuidePage />} />
                 <Route path="/docs/*" element={<DocsPage />} />
                 <Route path="/docs" element={<DocsPage />} />
                 <Route path="/security" element={<SecurityPage />} />
