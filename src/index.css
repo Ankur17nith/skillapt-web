@@ -659,6 +659,39 @@ a {
 .filter-button {
   display: none;
 }
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.pagination button {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 12px;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface);
+  font-size: 13px;
+  cursor: pointer;
+}
+.pagination button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.pagination button.active {
+  background: var(--accent);
+  color: var(--btn-primary-text);
+  border-color: var(--accent);
+}
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 .empty-state {
   padding: 64px;
   text-align: center;
