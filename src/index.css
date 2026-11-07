@@ -1136,7 +1136,8 @@ a {
   text-align: left;
   font-size: 14px;
 }
-.palette > button:hover {
+.palette > button:hover,
+.palette > button.selected {
   background: var(--surface);
 }
 .palette > button span {
