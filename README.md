@@ -1,6 +1,6 @@
 # skillpm-web
 
-The official web portal and marketplace for **[skillpm](https://skillpm.dev)** — the open package manager and registry for AI agent skills.
+The official web portal and marketplace for **[skillpm]** — the open package manager and registry for AI agent skills.
 
 Discover, install, and share reusable capabilities for Claude, Cursor, Codex, and other compatible agent runtimes.
 
