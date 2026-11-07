@@ -3,7 +3,9 @@ import { PageHeader } from "../components/PageHeader";
 import { StepCard } from "../components/StepCard";
 import { Button } from "../components/Button";
 import { CodeBlock } from "../components/CodeBlock";
+import { SEO } from "../components/SEO";
 import { CONFIG } from "../config";
+import { validateSubmitForm, generateRegistryPayload } from "../lib/validation";
 
 export function SubmitPage() {
   const [repo, setRepo] = useState("");
@@ -24,70 +26,44 @@ export function SubmitPage() {
     );
   };
 
-  const validate = (): boolean => {
-    const newErrors: Record<string, string> = {};
-
-    const ghRegex = /^https:\/\/github\.com\/([a-zA-Z0-9_.-]+)\/([a-zA-Z0-9_.-]+)(\/.*)?$/;
-    if (!repo.trim()) {
-      newErrors.repo = "Enter a public GitHub repository URL.";
-    } else if (!ghRegex.test(repo.trim())) {
-      newErrors.repo = "Must be a valid GitHub repository URL (e.g., https://github.com/user/repo).";
-    }
-
-    if (!name.trim()) {
-      newErrors.name = "Add a package name.";
-    } else if (!/^[a-z0-9-]+$/.test(name.trim())) {
-      newErrors.name = "Package name must be lowercase alphanumeric and hyphens only.";
-    }
-
-    if (!category) {
-      newErrors.category = "Select a primary category.";
-    }
-
-    if (compatibility.length === 0) {
-      newErrors.compatibility = "Select at least one compatible agent runtime.";
-    }
-
-    if (!description.trim()) {
-      newErrors.description = "Add a short description.";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleGenerate = () => {
-    if (!validate()) {
+    const errs = validateSubmitForm({
+      repo,
+      name,
+      category,
+      compatibility,
+      description,
+    });
+
+    setErrors(errs);
+    if (Object.keys(errs).length > 0) {
       setGeneratedJson(null);
       return;
     }
-
-    const cleanRepoMatch = repo.trim().match(/^https:\/\/github\.com\/([a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+)/);
-    const repoIdentifier = cleanRepoMatch ? cleanRepoMatch[1] : repo.trim();
 
     const tags = tagsInput
       .split(",")
       .map((t) => t.trim().toLowerCase())
       .filter((t) => t.length > 0);
 
-    const payload = {
-      name: name.trim(),
-      slug: name.trim(),
-      description: description.trim(),
-      repository: repoIdentifier,
-      category,
-      tags: tags.length > 0 ? tags : [category.toLowerCase()],
-      compatibility,
+    const payload = generateRegistryPayload({
+      repo,
+      name,
+      version,
       license,
-      manifest: manifest.trim() || "SKILL.md",
-      version: version.trim() || "0.1.0",
-    };
+      category,
+      manifest,
+      compatibility,
+      tags,
+      description,
+    });
 
     setGeneratedJson(JSON.stringify(payload, null, 2));
   };
 
   return (
     <main className="shell page">
+      <SEO title="Submit a skill" description="Add your skill to the public registry." url="/submit" />
       <PageHeader title="Submit a skill">
         <p>Add your skill to the public registry.</p>
       </PageHeader>
