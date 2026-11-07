@@ -2,44 +2,74 @@
 title: "CLI reference"
 label: "CLI reference"
 slug: "cli-reference"
-prev: "writing-a-skill"
-prevTitle: "Writing a skill"
-next: "faq"
-nextTitle: "FAQ"
+prev: "publishing"
+prevTitle: "Publishing"
+next: "security-model"
+nextTitle: "Security model"
 ---
 
-# CLI reference
+Complete reference for the `skillapt` command-line interface.
 
-Reference guide for all commands in the `skillpm` command-line interface.
+## skillapt install
 
-## skillpm install
-
-Installs a skill into the current workspace:
+Installs one or more skills into your project.
 
 ```bash
-skillpm install <repo>[/subpath][@version]
+skillapt install <name>[@version]
 ```
 
-## skillpm list
+### Options:
+- `--save-dev`: Save to devDependencies in lockfile.
+- `--registry <url>`: Override default registry endpoint.
 
-Lists all currently installed skills and their permissions:
+## skillapt publish
+
+Validates, packages, and publishes a new release to the Skillapt Registry.
 
 ```bash
-skillpm list
+skillapt publish
 ```
 
-## skillpm update
+### Options:
+- `--token <token>`: Explicitly provide API token.
+- `--dry-run`: Inspect archive and validate manifest without uploading.
 
-Updates installed skills to their latest compatible release:
+## skillapt list
+
+Lists all installed agent skills in the active workspace.
 
 ```bash
-skillpm update [name]
+skillapt list
 ```
 
-## skillpm remove
+## skillapt update
 
-Removes a skill from the active environment:
+Updates installed skills to their highest non-yanked versions matching SemVer ranges.
 
 ```bash
-skillpm remove <name>
+skillapt update [name]
+```
+
+## skillapt remove
+
+Uninstalls a skill and removes it from `skillapt-lock.json`.
+
+```bash
+skillapt remove <name>
+```
+
+## skillapt login
+
+Authenticates the CLI tool with your Skillapt / GitHub account.
+
+```bash
+skillapt login
+```
+
+## skillapt whoami
+
+Displays the currently authenticated username and registry status.
+
+```bash
+skillapt whoami
 ```

@@ -64,7 +64,9 @@ export function getAllDocs(): DocPage[] {
     "getting-started",
     "installing-skills",
     "writing-a-skill",
+    "publishing",
     "cli-reference",
+    "security-model",
     "faq",
   ];
 

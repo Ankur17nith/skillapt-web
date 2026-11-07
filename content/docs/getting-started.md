@@ -1,37 +1,47 @@
 ---
-title: "Install your first skill"
+title: "Getting started with skillapt"
 label: "Getting started"
 slug: "getting-started"
-prev: null
 next: "installing-skills"
 nextTitle: "Installing skills"
 ---
 
-# Install your first skill
+`skillapt` is a dedicated, secure package manager and marketplace built specifically for **AI agent skills**.
 
-Use skillpm to find and add capabilities to your AI agent.
+An **agent skill** is a modular package that teaches an AI agent (such as Claude, Cursor, Codex, Antigravity, or custom LLM frameworks) how to perform specialized tasks. Skills provide prompts, templates, schemas, and helper scripts that agents consume to accomplish workflows.
 
-## Install the CLI
+## Prerequisites
 
-The skillpm CLI works with Node.js 20 or newer. Install it globally or run it with npx.
-
-```bash
-npm install -g skillpm
-```
-
-> **Before you install**
-> Review the source, requested permissions, and compatibility list for every skill.
-
-## Install a skill
-
-Pass the publisher and skill name to the install command.
+The `skillapt` CLI requires Node.js 20 or newer. Install it globally via npm:
 
 ```bash
-skillpm install paperplane/pdf-summarizer
+npm install -g skillapt
 ```
 
-## Check installed skills
+Verify your installation:
 
 ```bash
-skillpm list
+skillapt --version
 ```
+
+## Installing your first skill
+
+To install a skill into your current workspace or project:
+
+```bash
+skillapt install pdf-summarizer
+```
+
+The CLI inspects the package manifest (`skill.json`), verifies the SHA-256 integrity hash against the registry, displays declared permissions, and downloads the tarball into your `.skills/` directory.
+
+## Listing installed skills
+
+To view all installed skills and their permissions in the current workspace:
+
+```bash
+skillapt list
+```
+
+## Running with agents
+
+Skills declare runtime compatibility with Claude Desktop, Cursor, Codex, Antigravity, and OpenAI. Once installed, your agent runtime automatically detects the skill's `SKILL.md` prompt instructions.
