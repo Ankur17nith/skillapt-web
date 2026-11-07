@@ -1,54 +1,92 @@
+import { useParams, Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { Logo } from "../components/Logo";
 import { CodeBlock } from "../components/CodeBlock";
-
-const docSections = [
-  "Getting started",
-  "Installing skills",
-  "Writing a skill",
-  "CLI reference",
-  "FAQ",
-];
+import { getAllDocs, getDocBySlug } from "../lib/docs";
 
 export function DocsPage() {
+  const { "*": restSlug } = useParams();
+  const allDocs = getAllDocs();
+  const activeSlug = restSlug?.replace(/^\//, "") || "getting-started";
+  const doc = getDocBySlug(activeSlug) || allDocs[0];
+
   return (
     <main className="docs-layout">
       <aside className="docs-nav">
         <Logo variant="full" />
         <strong>Documentation</strong>
-        {docSections.map((s) => (
-          <a href={`#${s.replaceAll(" ", "-")}`} key={s}>
-            {s}
-          </a>
+        {allDocs.map((d) => (
+          <Link
+            key={d.slug}
+            to={`/docs/${d.slug}`}
+            style={{
+              color: d.slug === doc.slug ? "var(--text)" : "var(--muted)",
+              fontWeight: d.slug === doc.slug ? 600 : 400,
+            }}
+          >
+            {d.label}
+          </Link>
         ))}
       </aside>
+
       <article className="docs-article">
-        <span className="label">Getting started</span>
-        <h1>Install your first skill</h1>
-        <p className="lead">Use skillpm to find and add capabilities to your AI agent.</p>
-        <h2 id="Installing-skills">Install the CLI</h2>
-        <p>
-          The skillpm CLI works with Node.js 20 or newer. Install it globally or run it with npx.
-        </p>
-        <CodeBlock>npm install -g skillpm</CodeBlock>
-        <div className="callout">
-          <strong>Before you install</strong>
-          <p>Review the source, requested permissions, and compatibility list for every skill.</p>
-        </div>
-        <h2 id="Writing-a-skill">Install a skill</h2>
-        <p>Pass the publisher and skill name to the install command.</p>
-        <CodeBlock>skillpm install paperplane/pdf-summarizer</CodeBlock>
-        <h2 id="CLI-reference">Check installed skills</h2>
-        <CodeBlock>skillpm list</CodeBlock>
+        <span className="label">{doc.label}</span>
+        <h1>{doc.title}</h1>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{
+            h1: () => null, // Suppress top H1 since rendered above
+            h2: ({ children }) => {
+              const text = String(children);
+              const id = text.replaceAll(" ", "-");
+              return <h2 id={id}>{children}</h2>;
+            },
+            blockquote: ({ children }) => (
+              <div className="callout">{children}</div>
+            ),
+            code: ({ className, children, ...props }) => {
+              const text = String(children).replace(/\n$/, "");
+              if (
+                text.includes("\n") ||
+                text.startsWith("npm") ||
+                text.startsWith("skillpm") ||
+                text.startsWith("git")
+              ) {
+                return <CodeBlock>{text}</CodeBlock>;
+              }
+              return (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              );
+            },
+          }}
+        >
+          {doc.content}
+        </ReactMarkdown>
+
         <div className="docs-pager">
-          <a href="#Installing-skills">← Installation</a>
-          <a href="#Writing-a-skill">Writing a skill →</a>
+          {doc.prev ? (
+            <Link to={`/docs/${doc.prev.slug}`}>← {doc.prev.title}</Link>
+          ) : (
+            <span />
+          )}
+          {doc.next ? (
+            <Link to={`/docs/${doc.next.slug}`}>{doc.next.title} →</Link>
+          ) : (
+            <span />
+          )}
         </div>
       </article>
+
       <aside className="docs-outline">
         <strong>On this page</strong>
-        <a href="#Installing-skills">Install the CLI</a>
-        <a href="#Writing-a-skill">Install a skill</a>
-        <a href="#CLI-reference">Check installed skills</a>
+        {doc.headings.map((h) => (
+          <a href={`#${h.id}`} key={h.id}>
+            {h.text}
+          </a>
+        ))}
       </aside>
     </main>
   );
