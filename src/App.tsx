@@ -14,6 +14,7 @@ const DocsPage = lazy(() => import("./pages/DocsPage").then((m) => ({ default: m
 const SecurityPage = lazy(() => import("./pages/SecurityPage").then((m) => ({ default: m.SecurityPage })));
 const AboutPage = lazy(() => import("./pages/AboutPage").then((m) => ({ default: m.AboutPage })));
 const BrandPage = lazy(() => import("./pages/BrandPage").then((m) => ({ default: m.BrandPage })));
+const DashboardPage = lazy(() => import("./pages/DashboardPage").then((m) => ({ default: m.DashboardPage })));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })));
 
 import { Container } from "./components/Container";
@@ -48,6 +49,7 @@ export default function App() {
                 <Route path="/security" element={<SecurityPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/brand" element={<BrandPage />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Route>
             </Routes>
