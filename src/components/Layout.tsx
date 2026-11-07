@@ -13,8 +13,17 @@ export interface ToastData {
   message: string;
 }
 
+const getInitialTheme = (): Theme => {
+  if (typeof window !== "undefined") {
+    const saved = localStorage.getItem("skillpm-theme") as Theme | null;
+    if (saved === "light" || saved === "dark") return saved;
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) return "dark";
+  }
+  return "light";
+};
+
 export function Layout() {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>(getInitialTheme);
   const [palette, setPalette] = useState(false);
   const [toastData, setToastData] = useState<ToastData | null>(null);
 
@@ -25,6 +34,30 @@ export function Layout() {
     setToastData({ title, message });
     window.setTimeout(() => setToastData(null), 2000);
   };
+
+  const toggleTheme = () => {
+    const nextTheme: Theme = theme === "light" ? "dark" : "light";
+    setTheme(nextTheme);
+    try {
+      localStorage.setItem("skillpm-theme", nextTheme);
+      document.documentElement.setAttribute("data-theme", nextTheme);
+    } catch (e) {}
+  };
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const listener = (e: MediaQueryListEvent) => {
+      if (!localStorage.getItem("skillpm-theme")) {
+        const nextTheme: Theme = e.matches ? "dark" : "light";
+        setTheme(nextTheme);
+        document.documentElement.setAttribute("data-theme", nextTheme);
+      }
+    };
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
+  }, [theme]);
 
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
@@ -44,7 +77,7 @@ export function Layout() {
       <DocumentTitle />
       <Navbar
         theme={theme}
-        toggleTheme={() => setTheme(theme === "light" ? "dark" : "light")}
+        toggleTheme={toggleTheme}
         openPalette={() => setPalette(true)}
       />
       <Outlet
