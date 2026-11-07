@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Logo } from "../components/Logo";
 import { CodeBlock } from "../components/CodeBlock";
+import { Container } from "../components/Container";
 import { getAllDocs, getDocBySlug } from "../lib/docs";
 
 export function DocsPage() {
@@ -12,8 +13,10 @@ export function DocsPage() {
   const doc = getDocBySlug(activeSlug) || allDocs[0];
 
   return (
-    <main className="docs-layout">
-      <aside className="docs-nav">
+    <main className="page">
+      <Container>
+        <div className="docs-layout">
+          <aside className="docs-nav">
         <Logo variant="full" />
         <strong>Documentation</strong>
         {allDocs.map((d) => (
@@ -88,6 +91,8 @@ export function DocsPage() {
           </a>
         ))}
       </aside>
+        </div>
+      </Container>
     </main>
   );
 }

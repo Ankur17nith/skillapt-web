@@ -4,6 +4,7 @@ import { Icon } from "./Icon";
 import { Logo } from "./Logo";
 import { Button } from "./Button";
 import { ThemeToggle } from "./ThemeToggle";
+import { Container } from "./Container";
 import type { Theme } from "../types";
 
 export function Navbar({
@@ -28,42 +29,44 @@ export function Navbar({
   return (
     <>
       <nav className="navbar">
-        <Logo variant="full" />
-        <div className="nav-links">
-          {items.slice(1).map(([label, path]) => (
-            <NavLink
-              key={path}
-              to={path}
-              className={({ isActive }) => (isActive ? "active" : "")}
+        <Container className="navbar-inner">
+          <Logo variant="full" />
+          <div className="nav-links">
+            {items.slice(1).map(([label, path]) => (
+              <NavLink
+                key={path}
+                to={path}
+                className={({ isActive }) => (isActive ? "active" : "")}
+              >
+                {label}
+              </NavLink>
+            ))}
+          </div>
+          <div className="nav-actions">
+            <button className="nav-search" onClick={openPalette} aria-label="Search skills">
+              <Icon name="search" size={15} />
+              Search <kbd>⌘K</kbd>
+            </button>
+            <a
+              className="icon-button"
+              href="https://github.com/Ankur17nith/skillpm-web"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub"
             >
-              {label}
-            </NavLink>
-          ))}
-        </div>
-        <div className="nav-actions">
-          <button className="nav-search" onClick={openPalette} aria-label="Search skills">
-            <Icon name="search" size={15} />
-            Search <kbd>⌘K</kbd>
-          </button>
-          <a
-            className="icon-button"
-            href="https://github.com/Ankur17nith/skillpm-web"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
+              <Icon name="github" />
+            </a>
+            <ThemeToggle theme={theme} toggle={toggleTheme} />
+            <Button onClick={() => navigate("/docs")}>Install CLI</Button>
+          </div>
+          <button
+            className="mobile-menu-button"
+            onClick={() => setOpen(true)}
+            aria-label="Open mobile menu"
           >
-            <Icon name="github" />
-          </a>
-          <ThemeToggle theme={theme} toggle={toggleTheme} />
-          <Button onClick={() => navigate("/docs")}>Install CLI</Button>
-        </div>
-        <button
-          className="mobile-menu-button"
-          onClick={() => setOpen(true)}
-          aria-label="Open mobile menu"
-        >
-          <Icon name="menu" />
-        </button>
+            <Icon name="menu" />
+          </button>
+        </Container>
       </nav>
       {open && (
         <div className="full-menu" role="dialog" aria-modal="true" aria-label="Mobile Navigation">

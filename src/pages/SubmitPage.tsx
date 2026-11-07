@@ -4,6 +4,7 @@ import { StepCard } from "../components/StepCard";
 import { Button } from "../components/Button";
 import { CodeBlock } from "../components/CodeBlock";
 import { SEO } from "../components/SEO";
+import { Container } from "../components/Container";
 import { CONFIG } from "../config";
 import { validateSubmitForm, generateRegistryPayload } from "../lib/validation";
 
@@ -62,31 +63,31 @@ export function SubmitPage() {
   };
 
   return (
-    <main className="shell page">
-      <SEO title="Submit a skill" description="Add your skill to the public registry." url="/submit" />
-      <PageHeader title="Submit a skill">
-        <p>Add your skill to the public registry.</p>
-      </PageHeader>
-      <div className="submit-steps">
-        <StepCard number="1" title="Add a SKILL.md">
-          Describe capabilities and permissions.
-        </StepCard>
-        <StepCard number="2" title="Open a pull request">
-          Generate the registry entry.
-        </StepCard>
-        <StepCard number="3" title="Get reviewed">
-          Automated checks and human review.
-        </StepCard>
-      </div>
-      <section className="form-card">
-        <div className="form-intro">
-          <span>Frontend preview</span>
-          <h2>Package metadata</h2>
-          <p>
-            This form validates and generates a registry entry locally. Publishing happens through a
-            GitHub pull request.
-          </p>
+    <main className="page">
+      <Container>
+        <SEO title="Submit a skill" description="Add your skill to the public registry." url="/submit" />
+        <PageHeader title="Submit a skill">
+          <p>Add your skill to the public registry.</p>
+        </PageHeader>
+        <div className="submit-steps">
+          <StepCard number="1" title="Add a SKILL.md">
+            Describe capabilities and permissions.
+          </StepCard>
+          <StepCard number="2" title="Open a pull request">
+            Generate the registry entry.
+          </StepCard>
+          <StepCard number="3" title="Get reviewed">
+            Automated checks and human review.
+          </StepCard>
         </div>
+        <div className="form-card">
+          <div className="form-intro">
+            <h2>Package metadata</h2>
+            <p>
+              This form validates and generates a registry entry locally. Publishing happens through a
+              GitHub pull request.
+            </p>
+          </div>
         <div className="form-grid">
           <label className="span-2">
             GitHub repository URL
@@ -202,7 +203,7 @@ export function SubmitPage() {
             )}
           </label>
         </div>
-      </section>
+      </div>
       <div className="generate">
         <Button onClick={handleGenerate}>Generate registry entry</Button>
         {generatedJson && (
@@ -218,6 +219,7 @@ export function SubmitPage() {
           </>
         )}
       </div>
+      </Container>
     </main>
   );
 }

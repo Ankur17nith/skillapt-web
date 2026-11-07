@@ -80,12 +80,27 @@ kbd {
 a {
   color: inherit;
 }
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  box-sizing: border-box;
+}
 .shell {
-  width: min(1100px, calc(100% - 48px));
-  margin: auto;
+  width: 100%;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+  box-sizing: border-box;
 }
 .page {
-  padding: 72px 0 96px;
+  padding-top: 64px;
+  padding-bottom: 96px;
 }
 .narrow {
   max-width: 760px;
@@ -95,11 +110,14 @@ a {
   z-index: 30;
   top: 0;
   height: 64px;
-  display: flex;
-  align-items: center;
-  padding: 0 max(24px, calc((100vw - 1100px)/2));
+  padding: 0;
   border-bottom: 1px solid var(--border);
   background: var(--bg);
+}
+.navbar-inner {
+  display: flex;
+  align-items: center;
+  height: 100%;
 }
 .logo {
   display: flex;
@@ -203,14 +221,13 @@ a {
   border-bottom: 1px solid var(--border);
 }
 .hero-grid {
-  width: min(1100px, calc(100% - 48px));
   min-height: 520px;
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: 24px;
   align-items: center;
-  margin: auto;
-  padding: 64px 0;
+  padding-top: 64px;
+  padding-bottom: 48px;
 }
 .hero-grid > div {
   grid-column: span 6;
@@ -281,6 +298,8 @@ a {
   background: var(--surface);
 }
 .copy-command code {
+  flex: 1 1 auto;
+  min-width: 0;
   overflow: hidden;
   font-size: 13px;
   text-overflow: ellipsis;
@@ -353,9 +372,13 @@ a {
 .terminal-body .success {
   color: var(--success);
 }
-.shell > section {
-  padding: 72px 0;
+.home-section {
+  padding: 48px 0;
   border-bottom: 1px solid var(--border);
+}
+.home-section:last-child {
+  border-bottom: 0;
+  padding-bottom: 96px;
 }
 .section-title {
   display: flex;
@@ -723,6 +746,9 @@ a {
   grid-template-columns: 2fr 1fr;
   gap: 48px;
 }
+.detail-main {
+  min-width: 0;
+}
 .detail-title {
   display: flex;
   align-items: center;
@@ -979,14 +1005,23 @@ a {
   padding: 32px;
   border: 1px solid var(--border);
   border-radius: 6px;
+  box-sizing: border-box;
+  width: 100%;
 }
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  width: 100%;
 }
 .form-grid > label {
   margin: 0;
+}
+.form-grid input,
+.form-grid select,
+.form-grid textarea {
+  width: 100%;
+  box-sizing: border-box;
 }
 .form-grid label > span,
 .form-grid small {
@@ -1023,13 +1058,14 @@ a {
   width: max-content;
 }
 .docs-layout {
-  width: min(1280px, calc(100% - 48px));
+  width: 100%;
   display: grid;
-  grid-template-columns: 190px minmax(0, 720px) 170px;
-  justify-content: center;
-  gap: 56px;
-  margin: auto;
-  padding: 64px 0 96px;
+  grid-template-columns: 190px minmax(0, 1fr) 170px;
+  gap: 40px;
+  padding-bottom: 40px;
+}
+.docs-article {
+  min-width: 0;
 }
 .docs-nav,
 .docs-outline {
@@ -1605,11 +1641,10 @@ footer {
   border-top: 1px solid var(--border);
 }
 .footer-main {
-  width: min(1100px, calc(100% - 48px));
+  width: 100%;
   display: grid;
   grid-template-columns: 1.5fr repeat(3, 1fr);
   gap: 40px;
-  margin: auto;
   padding: 64px 0;
 }
 .footer-main > div {
@@ -1629,10 +1664,9 @@ footer {
   font-size: 13px;
 }
 .footer-bottom {
-  width: min(1100px, calc(100% - 48px));
+  width: 100%;
   display: flex;
   justify-content: space-between;
-  margin: auto;
   padding: 24px 0;
   color: var(--muted);
   border-top: 1px solid var(--border);
@@ -1741,18 +1775,24 @@ footer {
   }
 }
 @media (max-width: 600px) {
-  .shell,
-  .hero-grid {
-    width: calc(100% - 32px);
+  .container,
+  .shell {
+    padding-left: 16px;
+    padding-right: 16px;
   }
   .page {
     padding-top: 48px;
+    padding-bottom: 64px;
+  }
+  .form-card {
+    padding: 20px;
   }
   .home-hero h1 {
     font-size: 40px;
   }
   .hero-grid {
-    padding: 56px 0;
+    padding-top: 56px;
+    padding-bottom: 56px;
   }
   .card-grid,
   .results .card-grid,
@@ -1766,8 +1806,8 @@ footer {
   .form-grid .span-2 {
     grid-column: auto;
   }
-  .shell > section {
-    padding: 64px 0;
+  .home-section {
+    padding: 48px 0;
   }
   .browse-tools {
     grid-template-columns: 1fr 1fr;
@@ -1793,15 +1833,16 @@ footer {
     z-index: 20;
     bottom: 0;
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 8px;
-    margin: 32px -16px -96px;
-    padding: 12px 16px;
+    margin: 32px 0 0;
+    padding: 12px 0;
     border-top: 1px solid var(--border);
     background: var(--bg);
   }
   .mobile-install .copy-command {
     margin: 0;
+    min-width: 0;
   }
   .mobile-install .copy-command button {
     font-size: 0;
@@ -1820,7 +1861,7 @@ footer {
     font-size: 36px;
   }
   .docs-layout {
-    width: calc(100% - 32px);
+    width: 100%;
     grid-template-columns: 1fr;
   }
   .docs-nav {

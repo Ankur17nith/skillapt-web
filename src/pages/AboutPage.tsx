@@ -1,12 +1,15 @@
 import { PageHeader } from "../components/PageHeader";
 import { Button } from "../components/Button";
+import { Container } from "../components/Container";
 
 export function AboutPage() {
   return (
-    <main className="shell narrow page">
-      <PageHeader title="About skillpm">
-        <p>We make useful agent capabilities easier to find, inspect, and share.</p>
-      </PageHeader>
+    <main className="page">
+      <Container>
+        <div className="narrow">
+          <PageHeader title="About skillpm">
+            <p>We make useful agent capabilities easier to find, inspect, and share.</p>
+          </PageHeader>
       <section>
         <h2>Our mission</h2>
         <p>
@@ -29,6 +32,8 @@ export function AboutPage() {
           Contact us
         </Button>
       </section>
+        </div>
+      </Container>
     </main>
   );
 }

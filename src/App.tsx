@@ -16,10 +16,14 @@ const AboutPage = lazy(() => import("./pages/AboutPage").then((m) => ({ default:
 const BrandPage = lazy(() => import("./pages/BrandPage").then((m) => ({ default: m.BrandPage })));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then((m) => ({ default: m.NotFoundPage })));
 
+import { Container } from "./components/Container";
+
 function RouteFallback() {
   return (
-    <div className="shell page" style={{ minHeight: "400px", padding: "40px 0" }}>
-      <LoadingState />
+    <div className="page" style={{ minHeight: "400px", padding: "40px 0" }}>
+      <Container>
+        <LoadingState />
+      </Container>
     </div>
   );
 }

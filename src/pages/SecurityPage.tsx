@@ -4,14 +4,16 @@ import { FeatureCard } from "../components/FeatureCard";
 import { SectionTitle } from "../components/SectionTitle";
 import { Icon } from "../components/Icon";
 import { Button } from "../components/Button";
+import { Container } from "../components/Container";
 
 export function SecurityPage() {
   const navigate = useNavigate();
   return (
-    <main className="shell page">
-      <PageHeader title="How we keep skills safe">
-        <p>Clear checks, visible permissions, and a public process.</p>
-      </PageHeader>
+    <main className="page">
+      <Container>
+        <PageHeader title="How we keep skills safe">
+          <p>Clear checks, visible permissions, and a public process.</p>
+        </PageHeader>
       <div className="feature-grid">
         <FeatureCard title="Repository provenance">
           Package pages link directly to their source and history.
@@ -46,6 +48,7 @@ export function SecurityPage() {
         </div>
         <Button onClick={() => navigate("/about")}>Contact security</Button>
       </section>
+      </Container>
     </main>
   );
 }

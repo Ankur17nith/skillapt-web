@@ -12,6 +12,7 @@ import { ReportModal } from "../components/ReportModal";
 import { SectionTitle } from "../components/SectionTitle";
 import { SkillCard } from "../components/SkillCard";
 import { SEO } from "../components/SEO";
+import { Container } from "../components/Container";
 import { NotFoundPage } from "./NotFoundPage";
 import { getSkillBySlug, getRelated, getInstallCommand, getSkillLanguage, formatRelativeTime } from "../lib/skills";
 
@@ -52,13 +53,14 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
   };
 
   return (
-    <main className="shell page">
-      <SEO
-        title={skill.name}
-        description={skill.description}
-        url={`/skills/${skill.slug}`}
-        type="article"
-      />
+    <main className="page">
+      <Container>
+        <SEO
+          title={skill.name}
+          description={skill.description}
+          url={`/skills/${skill.slug}`}
+          type="article"
+        />
       <div className="breadcrumbs">
         <Link to="/">Home</Link>
         <span>/</span>
@@ -281,6 +283,7 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
           onSubmit={handleReportSubmit}
         />
       )}
+      </Container>
     </main>
   );
 }

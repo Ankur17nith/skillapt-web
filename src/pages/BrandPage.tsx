@@ -3,14 +3,16 @@ import { PageHeader } from "../components/PageHeader";
 import { SectionTitle } from "../components/SectionTitle";
 import { Logo } from "../components/Logo";
 import { Button } from "../components/Button";
+import { Container } from "../components/Container";
 
 export function BrandPage() {
   const navigate = useNavigate();
   return (
-    <main className="shell page brand-page">
-      <PageHeader title="Brand assets">
-        <p>Logo files and usage guidance for skillpm.</p>
-      </PageHeader>
+    <main className="page brand-page">
+      <Container>
+        <PageHeader title="Brand assets">
+          <p>Logo files and usage guidance for skillpm.</p>
+        </PageHeader>
       <section className="brand-logos">
         <div className="brand-sample light-sample">
           <Logo variant="full" linked={false} />
@@ -107,6 +109,7 @@ export function BrandPage() {
         </div>
       </section>
       <Button onClick={() => navigate("/")}>Back to home</Button>
+      </Container>
     </main>
   );
 }
