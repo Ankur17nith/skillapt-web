@@ -1,3 +1,4 @@
+import { parseGithubRepo } from "./safe";
 import rawSkills from "../data/registry.json";
 import type { Skill, FilterOptions, SortOption } from "../types";
 
@@ -160,7 +161,7 @@ export function apiDetailToSkill(detail: import("./api").ApiSkillDetail): Skill 
     slug: detail.name,
     description: detail.description,
     longDescription: detail.description,
-    repo: detail.repository?.replace("https://github.com/", "") || `${detail.owner.handle}/${detail.name}`,
+    repo: parseGithubRepo(detail.repository) || `${detail.owner.handle}/${detail.name}`,
     author: detail.owner.handle,
     tags: detail.keywords && detail.keywords.length > 0 ? detail.keywords : [detail.category, ...detail.compatibility],
     category: detail.category.charAt(0).toUpperCase() + detail.category.slice(1),
