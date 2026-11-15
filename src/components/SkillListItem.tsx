@@ -7,7 +7,7 @@ export function SkillListItem({ skill }: { skill: Skill }) {
   const navigate = useNavigate();
   const slug = skill.slug || skill.name;
   const version = skill.version || skill.ref.replace(/^v/, "");
-  const updatedText = skill.updatedAt ? formatRelativeTime(skill.updatedAt) : skill.updated;
+  const updatedText = skill.updatedAt ? formatRelativeTime(skill.updatedAt) : "recently";
   const lang = getSkillLanguage(skill);
 
   return (

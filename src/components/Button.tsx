@@ -1,16 +1,23 @@
-import type { ReactNode } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
+
+type ButtonProps = {
+  children: ReactNode;
+  variant?: "primary" | "secondary" | "ghost";
+} & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children">;
 
 export function Button({
   children,
   variant = "primary",
-  onClick,
-}: {
-  children: ReactNode;
-  variant?: "primary" | "secondary" | "ghost";
-  onClick?: () => void;
-}) {
+  className,
+  type = "button",
+  ...rest
+}: ButtonProps) {
   return (
-    <button className={`button ${variant}`} onClick={onClick}>
+    <button
+      {...rest}
+      type={type}
+      className={`button ${variant}${className ? ` ${className}` : ""}`}
+    >
       {children}
     </button>
   );
