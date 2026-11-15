@@ -17,7 +17,7 @@
     "compatibility": ["Claude", "Cursor", "Codex"],
     "license": "MIT",
     "updatedAt": "2025-05-24T10:00:00Z",
-    "readmeMarkdown": "# PDF Summarizer\n\nGive your agent a reliable way to read long PDF files and return structured summaries with citations.\n\n### Installation\n\n```bash\nskillpm install paperplane/pdf-summarizer\n```\n\n### What it can do\n\n- Extract text from local and remote PDF files\n- Return summaries with page-level citations\n- Answer questions using only the supplied document\n\n### Usage\n\n```typescript\nagent.use(\"pdf-summarizer\", {\n  file: \"./annual-report.pdf\",\n  format: \"brief\"\n})\n```"
+    "readmeMarkdown": "# PDF Summarizer\n\nGive your agent a reliable way to read long PDF files and return structured summaries with citations.\n\n### Installation\n\n```bash\nskillapt install paperplane/pdf-summarizer\n```\n\n### What it can do\n\n- Extract text from local and remote PDF files\n- Return summaries with page-level citations\n- Answer questions using only the supplied document\n\n### Usage\n\n```typescript\nagent.use(\"pdf-summarizer\", {\n  file: \"./annual-report.pdf\",\n  format: \"brief\"\n})\n```"
   },
   {
     "name": "code-reviewer",
@@ -37,7 +37,7 @@
     "compatibility": ["Claude", "Cursor"],
     "license": "Apache-2.0",
     "updatedAt": "2025-05-22T14:30:00Z",
-    "readmeMarkdown": "# Code Reviewer\n\nReview pull requests for bugs, security issues, and maintainability.\n\n### Installation\n\n```bash\nskillpm install shipyard/code-reviewer\n```\n\n### Features\n\n- Static analysis and security scanning\n- Actionable inline suggestions\n- CI/CD workflow integration"
+    "readmeMarkdown": "# Code Reviewer\n\nReview pull requests for bugs, security issues, and maintainability.\n\n### Installation\n\n```bash\nskillapt install shipyard/code-reviewer\n```\n\n### Features\n\n- Static analysis and security scanning\n- Actionable inline suggestions\n- CI/CD workflow integration"
   },
   {
     "name": "sql-helper",
@@ -57,7 +57,7 @@
     "compatibility": ["Claude", "Codex"],
     "license": "MIT",
     "updatedAt": "2025-05-20T09:15:00Z",
-    "readmeMarkdown": "# SQL Helper\n\nWrite, explain, and optimize SQL across common databases.\n\n### Installation\n\n```bash\nskillpm install databloom/sql-helper\n```"
+    "readmeMarkdown": "# SQL Helper\n\nWrite, explain, and optimize SQL across common databases.\n\n### Installation\n\n```bash\nskillapt install databloom/sql-helper\n```"
   },
   {
     "name": "web-researcher",
