@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://skillapt.dev/sitemap.xml
