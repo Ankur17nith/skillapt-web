@@ -1,5 +1,6 @@
 import rawSkills from "../data/registry.json";
 import type { Skill } from "../types";
+import { getRegistryUrl } from "../config";
 
 export interface ApiSkillOwner {
   handle: string;
@@ -142,11 +143,7 @@ export function clearApiCache() {
 const DEFAULT_TIMEOUT_MS = 10000;
 
 export function getApiBaseUrl(): string {
-  const envUrl = (import.meta.env.VITE_API_URL as string | undefined)?.trim();
-  if (envUrl && envUrl.length > 0) {
-    return envUrl.replace(/\/+$/, "");
-  }
-  return "";
+  return getRegistryUrl();
 }
 
 export function isUsingLiveApi(): boolean {
@@ -222,7 +219,7 @@ async function request<T>(
 }
 
 // ---------------------------------------------------------------------------
-// Fallback local mock implementations (when VITE_API_URL is unset)
+// Fallback local mock implementations (when VITE_REGISTRY_URL is unset)
 // ---------------------------------------------------------------------------
 
 function getFallbackRawSkills(): Skill[] {
@@ -261,7 +258,7 @@ function mapSkillToDetail(s: Skill): ApiSkillDetail {
     version: ver,
     sha256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     size: 14250,
-    tarballUrl: `https://registry.skillapt.dev/v1/skills/${s.name || s.slug}/-/${ver}.tgz`,
+    tarballUrl: `${getRegistryUrl() || "<registry-url>"}/v1/skills/${s.name || s.slug}/-/${ver}.tgz`,
     dependencies: {},
     publishedAt: s.updatedAt || "2026-11-01T12:00:00Z",
     yanked: false,
@@ -478,8 +475,9 @@ export const api = {
   async unyankVersion(name: string, version: string): Promise<{ name: string; version: string; yanked: boolean; message: string }> {
     if (isUsingLiveApi()) {
       clearApiCache();
-      return request(`/v1/skills/${encodeURIComponent(name)}/${encodeURIComponent(version)}/unyank`, {
-        method: "POST",
+      // The registry un-yanks with DELETE on the yank resource (see docs/openapi.yaml).
+      return request(`/v1/skills/${encodeURIComponent(name)}/${encodeURIComponent(version)}/yank`, {
+        method: "DELETE",
       });
     }
 

@@ -15,7 +15,7 @@ import { SEO } from "../components/SEO";
 import { Container } from "../components/Container";
 import { LoadingState } from "../components/LoadingState";
 import { NotFoundPage } from "./NotFoundPage";
-import { api, type ApiSkillDetail, ApiError } from "../lib/api";
+import { api, type ApiSkillDetail, ApiError, getApiBaseUrl } from "../lib/api";
 import { apiDetailToSkill, getRelated, getInstallCommand, getSkillLanguage, formatRelativeTime } from "../lib/skills";
 import type { Skill } from "../types";
 
@@ -102,7 +102,7 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
 
   const installCommands: Record<string, string> = {
     skillapt: installCmd,
-    curl: `curl -fsSL https://registry.skillapt.dev/v1/skills/${skill.name || skill.slug}/-/${version}.tgz -o skill.tgz`,
+    curl: `curl -fsSL ${detail.versions[version]?.tarballUrl || `${getApiBaseUrl() || "<registry-url>"}/v1/skills/${skill.name || skill.slug}/-/${version}.tgz`} -o skill.tgz`,
     manual: `git clone https://github.com/${skill.repo}.git`,
   };
 
