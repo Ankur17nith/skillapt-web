@@ -1,3 +1,4 @@
+import { safeAvatarUrl } from "../lib/safe";
 import { useState, useRef, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Icon } from "./Icon";
@@ -83,7 +84,8 @@ export function Navbar({
                   aria-expanded={userDropdown}
                 >
                   <img
-                    src={user.avatarUrl || "https://avatars.githubusercontent.com/u/12345"}
+                    src={safeAvatarUrl(user.avatarUrl)}
+                referrerPolicy="no-referrer"
                     alt={user.handle}
                     className="user-avatar"
                   />

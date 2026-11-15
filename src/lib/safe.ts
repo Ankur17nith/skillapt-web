@@ -41,3 +41,8 @@ export function slugifyHeading(text: string): string {
     .trim()
     .replace(/\s+/g, "-");
 }
+
+/** Avatar URLs come from the registry; fall back to a bundled icon unless http(s). */
+export function safeAvatarUrl(value: string | undefined | null): string {
+  return value && isHttpUrl(value) ? value : "/icon.svg";
+}

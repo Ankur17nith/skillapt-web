@@ -1,3 +1,4 @@
+import { safeAvatarUrl } from "../lib/safe";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import { Container } from "../components/Container";
@@ -170,7 +171,8 @@ export function DashboardPage() {
           <PageHeader title="Publisher Dashboard">
             <div style={{ display: "flex", alignItems: "center", gap: "12px", marginTop: "8px" }}>
               <img
-                src={user.avatarUrl || "https://avatars.githubusercontent.com/u/12345"}
+                src={safeAvatarUrl(user.avatarUrl)}
+                referrerPolicy="no-referrer"
                 alt={user.handle}
                 style={{ width: "28px", height: "28px", borderRadius: "50%", border: "1px solid var(--border)" }}
               />

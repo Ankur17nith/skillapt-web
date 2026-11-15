@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseGithubRepo, githubRepoUrl, isHttpUrl, slugifyHeading } from "./safe";
+import { parseGithubRepo, githubRepoUrl, isHttpUrl, slugifyHeading, safeAvatarUrl } from "./safe";
 
 describe("parseGithubRepo", () => {
   it("accepts owner/repo and github urls", () => {
@@ -29,5 +29,13 @@ describe("slugifyHeading", () => {
   it("makes stable ids", () => {
     expect(slugifyHeading("Getting Started")).toBe("getting-started");
     expect(slugifyHeading("`skillapt install`: usage!")).toBe("skillapt-install-usage");
+  });
+});
+
+describe("safeAvatarUrl", () => {
+  it("falls back to a bundled icon for non-http values", () => {
+    expect(safeAvatarUrl("https://avatars.githubusercontent.com/u/1")).toBe("https://avatars.githubusercontent.com/u/1");
+    expect(safeAvatarUrl("javascript:alert(1)")).toBe("/icon.svg");
+    expect(safeAvatarUrl(undefined)).toBe("/icon.svg");
   });
 });

@@ -1987,3 +1987,13 @@ footer {
   margin: 4px 0;
 }
 
+
+/* Shown when no registry URL is configured (VITE_REGISTRY_URL unset). */
+.demo-banner {
+  background: var(--surface, #f5f3ee);
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 13px;
+  padding: 8px 16px;
+  text-align: center;
+}

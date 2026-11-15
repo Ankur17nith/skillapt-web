@@ -6,6 +6,7 @@ import { CommandPalette } from "./CommandPalette";
 import { Toast } from "./Toast";
 import { ScrollToTop } from "./ScrollToTop";
 import { DocumentTitle } from "./DocumentTitle";
+import { isUsingLiveApi } from "../lib/api";
 import type { Theme } from "../types";
 
 export interface ToastData {
@@ -75,6 +76,11 @@ export function Layout() {
     <div className="app" data-theme={theme}>
       <ScrollToTop />
       <DocumentTitle />
+      {!isUsingLiveApi() && (
+        <div className="demo-banner" role="status">
+          Demo mode: showing bundled sample skills. Sign-in, tokens and reports are simulated in your browser.
+        </div>
+      )}
       <Navbar
         theme={theme}
         toggleTheme={toggleTheme}
