@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Typecheck, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build (demo mode)
+        run: npm run build
+
+      - name: Build (live registry configuration)
+        run: npm run build
+        env:
+          VITE_REGISTRY_URL: https://registry.example.workers.dev
+          VITE_SITE_URL: https://example.pages.dev
+
+      - name: Verify generated Cloudflare headers and SEO files
+        run: |
+          grep -q "connect-src 'self' https://registry.example.workers.dev" dist/_headers
+          grep -q "Sitemap: https://example.pages.dev/sitemap.xml" dist/robots.txt
+          test -f dist/sitemap.xml
+
+      - name: Audit production dependencies
+        run: npm audit --omit=dev --audit-level=high
