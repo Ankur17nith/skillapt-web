@@ -1,3 +1,5 @@
+import { slugifyHeading } from "./safe";
+
 export interface DocPage {
   slug: string;
   title: string;
@@ -42,7 +44,7 @@ function parseDoc(raw: string, fallbackSlug: string): DocPage {
   lines.forEach((line) => {
     if (line.startsWith("## ")) {
       const text = line.slice(3).trim();
-      const id = text.replaceAll(" ", "-");
+      const id = slugifyHeading(text);
       headings.push({ id, text });
     }
   });

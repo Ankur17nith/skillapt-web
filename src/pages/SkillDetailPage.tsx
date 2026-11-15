@@ -16,6 +16,8 @@ import { Container } from "../components/Container";
 import { LoadingState } from "../components/LoadingState";
 import { NotFoundPage } from "./NotFoundPage";
 import { api, type ApiSkillDetail, ApiError, getApiBaseUrl } from "../lib/api";
+import { githubRepoUrl } from "../lib/safe";
+import { safeMarkdownComponents } from "../components/markdownComponents";
 import { apiDetailToSkill, getRelated, getInstallCommand, getSkillLanguage, formatRelativeTime } from "../lib/skills";
 import type { Skill } from "../types";
 
@@ -100,10 +102,11 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
   const activeVersionObj = detail.versions[version];
   const versionsList = Object.values(detail.versions || {}).reverse();
 
+  const repoUrl = githubRepoUrl(skill.repo);
   const installCommands: Record<string, string> = {
     skillapt: installCmd,
     curl: `curl -fsSL ${detail.versions[version]?.tarballUrl || `${getApiBaseUrl() || "<registry-url>"}/v1/skills/${skill.name || skill.slug}/-/${version}.tgz`} -o skill.tgz`,
-    manual: `git clone https://github.com/${skill.repo}.git`,
+    manual: repoUrl ? `git clone ${repoUrl}.git` : "Repository not available",
   };
 
   const handleReportSubmit = async (reason: string, details: string) => {
@@ -208,6 +211,7 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   components={{
+                    ...safeMarkdownComponents,
                     code({ className, children, ...props }) {
                       const text = String(children).replace(/\n$/, "");
                       if (
@@ -304,11 +308,11 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
               command={installCommands[installMode]}
               notify={() => notify("Copied to clipboard", "Install command copied.")}
             />
-            <Button
-              onClick={() => window.open(`https://github.com/${skill.repo}`, "_blank")}
-            >
-              View on GitHub
-            </Button>
+            {repoUrl && (
+              <a className="button primary" href={repoUrl} target="_blank" rel="noopener noreferrer">
+                View on GitHub
+              </a>
+            )}
             <Button variant="ghost" onClick={() => setReportOpen(true)}>
               Report
             </Button>
@@ -361,11 +365,11 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
             command={installCommands.skillapt}
             notify={() => notify("Copied to clipboard", "Install command copied.")}
           />
-          <Button
-            onClick={() => window.open(`https://github.com/${skill.repo}`, "_blank")}
-          >
-            View on GitHub
-          </Button>
+          {repoUrl && (
+            <a className="button primary" href={repoUrl} target="_blank" rel="noopener noreferrer">
+              View on GitHub
+            </a>
+          )}
         </div>
         {reportOpen && (
           <ReportModal

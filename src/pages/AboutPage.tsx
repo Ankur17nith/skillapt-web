@@ -1,5 +1,5 @@
 import { PageHeader } from "../components/PageHeader";
-import { Button } from "../components/Button";
+import { CONFIG } from "../config";
 import { Container } from "../components/Container";
 import { SEO } from "../components/SEO";
 
@@ -26,13 +26,9 @@ export function AboutPage() {
           The CLI, package format, and registry tooling are open source. Decisions are discussed in
           public and contributions are welcome.
         </p>
-        <Button
-          onClick={() => {
-            window.location.href = "mailto:hello@skillapt.dev";
-          }}
-        >
-          Contact us
-        </Button>
+        <a className="button primary" href={CONFIG.ISSUES_URL} target="_blank" rel="noopener noreferrer">
+          Open an issue on GitHub
+        </a>
       </section>
         </div>
       </Container>

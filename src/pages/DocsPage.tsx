@@ -1,3 +1,4 @@
+import { isValidElement, type ReactNode } from "react";
 import { useParams, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -5,8 +6,17 @@ import { Logo } from "../components/Logo";
 import { CodeBlock } from "../components/CodeBlock";
 import { Container } from "../components/Container";
 import { getAllDocs, getDocBySlug } from "../lib/docs";
+import { slugifyHeading } from "../lib/safe";
+import { safeMarkdownComponents } from "../components/markdownComponents";
 
 import { SEO } from "../components/SEO";
+
+function nodeText(node: ReactNode): string {
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(nodeText).join("");
+  if (isValidElement(node)) return nodeText((node.props as { children?: ReactNode }).children);
+  return "";
+}
 
 export function DocsPage() {
   const { "*": restSlug } = useParams();
@@ -42,10 +52,10 @@ export function DocsPage() {
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
           components={{
+            ...safeMarkdownComponents,
             h1: () => null, // Suppress top H1 since rendered above
             h2: ({ children }) => {
-              const text = String(children);
-              const id = text.replaceAll(" ", "-");
+              const id = slugifyHeading(nodeText(children));
               return <h2 id={id}>{children}</h2>;
             },
             blockquote: ({ children }) => (
