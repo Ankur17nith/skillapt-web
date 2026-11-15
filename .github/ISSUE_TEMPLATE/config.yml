@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/Ankur17nith/skillapt-web/security/advisories/new
+    about: Please report security problems privately, not as public issues.
+  - name: CLI issues
+    url: https://github.com/Ankur17nith/skillapt/issues
+    about: Problems with the skillapt command line tool.
+  - name: Registry issues
+    url: https://github.com/Ankur17nith/skillapt-registry/issues
+    about: Problems with the registry API.

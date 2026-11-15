@@ -1,0 +1,29 @@
+name: Bug report
+description: Something on the site is broken or looks wrong
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Security issue? Do not file it here, see SECURITY.md."
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Include what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Mode
+      options: [Demo mode (no registry), Live registry, Not sure]
