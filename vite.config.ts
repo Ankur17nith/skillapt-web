@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "node:path";
 import { normalizeBaseUrl } from "./src/config";
+import { buildHeadersFile } from "./src/lib/cloudflare-headers";
 
 const ROUTES = [
   ["/", "daily", "1.0"],
@@ -16,11 +17,11 @@ const ROUTES = [
 ] as const;
 
 /**
- * Emits robots.txt / sitemap.xml and the static Open Graph/Twitter image tags
+ * Emits the Cloudflare _headers file (CSP etc.), robots.txt / sitemap.xml and the static Open Graph/Twitter image tags
  * (read by crawlers that do not run JS) pointing at VITE_SITE_URL. When the variable is unset (e.g. before a custom
  * domain exists) no absolute URLs are produced at all.
  */
-function siteSeo(siteUrl: string): Plugin {
+function siteSeo(siteUrl: string, registryUrl: string): Plugin {
   return {
     name: "skillapt-site-seo",
     transformIndexHtml() {
@@ -31,6 +32,9 @@ function siteSeo(siteUrl: string): Plugin {
       ];
     },
     generateBundle() {
+      // Cloudflare (Workers static assets / Pages) reads _headers from the output root.
+      const registryOrigin = registryUrl ? new URL(registryUrl).origin : "";
+      this.emitFile({ type: "asset", fileName: "_headers", source: buildHeadersFile(registryOrigin) });
       const robots = ["User-agent: *", "Allow: /"];
       if (siteUrl) robots.push("", `Sitemap: ${siteUrl}/sitemap.xml`);
       this.emitFile({ type: "asset", fileName: "robots.txt", source: `${robots.join("\n")}\n` });
@@ -51,8 +55,9 @@ function siteSeo(siteUrl: string): Plugin {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "VITE_");
   const siteUrl = normalizeBaseUrl(env.VITE_SITE_URL);
+  const registryUrl = normalizeBaseUrl(env.VITE_REGISTRY_URL) || normalizeBaseUrl(env.VITE_API_URL);
   return {
-    plugins: [react(), tailwindcss(), siteSeo(siteUrl)],
+    plugins: [react(), tailwindcss(), siteSeo(siteUrl, registryUrl)],
     resolve: {
       alias: {
         "@": path.resolve(import.meta.dirname, "./src"),

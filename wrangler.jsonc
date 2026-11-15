@@ -1,0 +1,12 @@
+{
+  // Cloudflare Workers static assets (free plan). Build first: `npm run build`.
+  // Deploy manually with `npx wrangler deploy` or via the GitHub Actions workflow.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "skillapt-web",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    // Serve index.html for unknown paths so React Router deep links work.
+    "not_found_handling": "single-page-application"
+  }
+}
