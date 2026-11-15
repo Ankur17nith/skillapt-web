@@ -11,7 +11,7 @@ import { CodeBlock } from "../components/CodeBlock";
 import { LoadingState } from "../components/LoadingState";
 import { SEO } from "../components/SEO";
 import { useAuth } from "../lib/auth";
-import { api, type ApiSkillSummary, type ApiToken, type CreateTokenResponse } from "../lib/api";
+import { api, getApiBaseUrl, isUsingLiveApi, type ApiSkillSummary, type ApiToken, type CreateTokenResponse } from "../lib/api";
 import { formatRelativeTime } from "../lib/skills";
 
 export function DashboardPage() {
@@ -157,6 +157,17 @@ export function DashboardPage() {
             <Button onClick={login} style={{ width: "100%", justifyContent: "center" }}>
               <Icon name="github" /> Sign in with GitHub
             </Button>
+            {isUsingLiveApi() && (
+              <p style={{ margin: "16px 0 0 0", color: "var(--muted)", fontSize: "13px", lineHeight: "1.6" }}>
+                Sessions are held by the registry. If you are already signed in but still see this page
+                (browsers block third-party cookies when the site and registry are on different domains),
+                manage your tokens on the{" "}
+                <a href={`${getApiBaseUrl()}/dashboard`} target="_blank" rel="noopener noreferrer">
+                  registry dashboard
+                </a>
+                .
+              </p>
+            )}
           </div>
         </Container>
       </main>
