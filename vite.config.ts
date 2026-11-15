@@ -63,6 +63,10 @@ export default defineConfig(({ mode }) => {
         "@": path.resolve(import.meta.dirname, "./src"),
       },
     },
+    build: {
+      // Never inline assets as data: URIs; the CSP (font-src/img-src) relies on real files.
+      assetsInlineLimit: 0,
+    },
     server: {
       host: "0.0.0.0",
       port: 8443,
