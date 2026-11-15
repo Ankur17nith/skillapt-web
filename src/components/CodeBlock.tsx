@@ -15,7 +15,7 @@ export function CodeBlock({ children }: { children: string }) {
         <Icon name={copied ? "check" : "copy"} size={15} />
         {copied ? "Copied" : "Copy"}
       </button>
-      <pre>{children}</pre>
+      <pre tabIndex={0}>{children}</pre>
     </div>
   );
 }
