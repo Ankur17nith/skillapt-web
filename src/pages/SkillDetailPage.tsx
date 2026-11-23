@@ -19,6 +19,7 @@ import { LoadingState } from "../components/LoadingState";
 import { NotFoundPage } from "./NotFoundPage";
 import { api, type ApiSkillDetail, ApiError, getApiBaseUrl } from "../lib/api";
 import { githubRepoUrl } from "../lib/safe";
+import { skillJsonLd } from "../lib/llms";
 import { safeMarkdownComponents } from "../components/markdownComponents";
 import { apiDetailToSkill, getRelated, getInstallCommand, getSkillLanguage, formatRelativeTime } from "../lib/skills";
 import type { Skill } from "../types";
@@ -134,6 +135,15 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
           description={skill.description}
           url={`/skills/${skill.slug}`}
           type="article"
+          jsonLd={skillJsonLd({
+            name: skill.name,
+            description: skill.description,
+            license: skill.license,
+            author: skill.author,
+            sourceUrl: skill.sourceUrl || githubRepoUrl(skill.repo) || undefined,
+            version: skill.version,
+            category: skill.category,
+          })}
         />
         <div className="breadcrumbs">
           <Link to="/">Home</Link>
