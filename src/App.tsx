@@ -43,7 +43,8 @@ export default function App() {
                 <Route path="/browse" element={<BrowsePage />} />
                 <Route path="/categories" element={<CategoriesPage />} />
                 <Route path="/collections" element={<CollectionsPage />} />
-                <Route path="/skills/:slug" element={<SkillDetailPage />} />
+                {/* Catch-all so scoped names such as /skills/@owner/skill resolve with a clean path. */}
+                <Route path="/skills/*" element={<SkillDetailPage />} />
                 <Route path="/submit" element={<SubmitPage />} />
                 <Route path="/publish" element={<PublishGuidePage />} />
                 <Route path="/docs/*" element={<DocsPage />} />

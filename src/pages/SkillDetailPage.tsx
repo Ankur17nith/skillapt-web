@@ -25,7 +25,7 @@ import { apiDetailToSkill, getRelated, getInstallCommand, getSkillLanguage, form
 import type { Skill } from "../types";
 
 export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: string, msg?: string) => void }) {
-  const { slug } = useParams<{ slug: string }>();
+  const slug = useParams()["*"]?.replace(/\/+$/, "") || undefined;
   const outletCtx = useOutletContext<{ notify?: (title?: string, msg?: string) => void } | null>();
   const notify = propNotify || outletCtx?.notify || (() => {});
 
