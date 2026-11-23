@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Icon } from "./Icon";
+import { OwnershipBadge } from "./OwnershipBadge";
 import { formatRelativeTime, getSkillLanguage } from "../lib/skills";
 import type { Skill } from "../types";
 
@@ -27,7 +28,9 @@ export function SkillCard({ skill, hover = false }: { skill: Skill; hover?: bool
         <code>v{version}</code>
       </div>
       <h3>{skill.name}</h3>
-      <span className="author">by @{skill.author}</span>
+      <span className="author">
+        by @{skill.author} <OwnershipBadge claimStatus={skill.claimStatus} />
+      </span>
       <p>{skill.description}</p>
       <div className="tags">
         {skill.tags.map((tag) => (

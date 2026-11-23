@@ -11,6 +11,8 @@ import { CodeBlock } from "../components/CodeBlock";
 import { ReportModal } from "../components/ReportModal";
 import { SectionTitle } from "../components/SectionTitle";
 import { SkillCard } from "../components/SkillCard";
+import { OwnershipBadge } from "../components/OwnershipBadge";
+import { ClaimNotice } from "../components/ClaimNotice";
 import { SEO } from "../components/SEO";
 import { Container } from "../components/Container";
 import { LoadingState } from "../components/LoadingState";
@@ -164,11 +166,23 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
                       <Icon name="check" size={18} />
                     </span>
                   )}
+                  <OwnershipBadge claimStatus={skill.claimStatus} />
                 </div>
                 <p>by @{skill.author}</p>
               </div>
             </div>
             <p className="lead">{skill.longDescription || skill.description}</p>
+            {skill.claimStatus === "unclaimed" && (
+              <ClaimNotice
+                name={skill.name}
+                owner={skill.author}
+                sourceUrl={skill.sourceUrl}
+                onClaimed={() => {
+                  notify("Skill claimed", `You now own ${skill.name}.`);
+                  void fetchDetail();
+                }}
+              />
+            )}
             <div className="tags">
               {skill.tags.map((tag) => (
                 <span key={tag}>{tag}</span>
