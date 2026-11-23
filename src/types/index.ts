@@ -37,6 +37,9 @@ export type Skill = {
   updatedAt: string;
   readmeMarkdown: string;
   version?: string;
+  /** "owned" | "claimed" | "unclaimed"; unclaimed listings are indexed from a public repository. */
+  claimStatus?: string;
+  sourceUrl?: string;
 };
 
 export type Theme = "light" | "dark";
