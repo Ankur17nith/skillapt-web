@@ -37,3 +37,7 @@
    - For marketing and documentation routes (`/docs/*`, `/publish`, `/security`), integrate `@prerenderer/rollup-plugin` into `vite.config.ts` during production build.
    - Generates pre-baked `dist/docs/*.html` static files for non-JS web crawlers.
    - Interactive pages (`/dashboard`) remain dynamic client routes.
+
+## 5. Status
+
+Implemented: a post-build step (`prerenderPages` in `vite.config.ts`, helpers in `src/lib/prerender.ts`) writes a static `index.html` per route. It uses the built `index.html` as a template and fills the head and body. React still mounts with `createRoot`, so there is no hydration mismatch. Not prerendered: skills outside the top `PRERENDER_MAX_SKILLS`, which fall back to the SPA. Rendering those on demand would need a Worker.

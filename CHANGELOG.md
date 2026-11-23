@@ -11,6 +11,11 @@ All notable changes to this project are documented here. The format follows
 - "Unclaimed" badge and claim flow on skill pages.
 - Build-time `llms.txt`, `llms-full.txt`, and JSON-LD (site and skill pages) for AI agents and search engines.
 
+- Prerendered HTML for crawlers that do not run JavaScript: the build writes an `index.html` per route (home, browse, categories, docs pages and the top skills) with its own title, description, canonical URL, JSON-LD and readable content. Live registry builds fetch the most-downloaded skills (`PRERENDER_MAX_SKILLS`, default 300); skill URLs are in `sitemap.xml`.
+
+### Changed
+- Skill pages now live at `/skills/*` so scoped names such as `/skills/@owner/skill` work with clean URLs.
+
 ### Fixed
 - Live registry requests now send lowercase category ids and `sort=updated`; filter and category card alignment.
 
