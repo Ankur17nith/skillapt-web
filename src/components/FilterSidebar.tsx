@@ -1,4 +1,5 @@
 import { Icon } from "./Icon";
+import { useCategories } from "../lib/useCategories";
 
 export function FilterSidebar({
   category,
@@ -19,6 +20,7 @@ export function FilterSidebar({
   clear: () => void;
   close?: () => void;
 }) {
+  const categories = useCategories();
   return (
     <aside className="filters">
       <div className="filter-head">
@@ -32,15 +34,20 @@ export function FilterSidebar({
       </div>
       <fieldset>
         <legend>Category</legend>
-        {["", "Coding", "Documents", "Data", "Research", "Security"].map((item) => (
-          <label key={item || "all"}>
+        <label>
+          <input type="radio" name="category" checked={category === ""} onChange={() => setCategory("")} />
+          All categories
+        </label>
+        {categories.map((item) => (
+          <label key={item.id} title={item.description}>
             <input
               type="radio"
               name="category"
-              checked={category === item}
-              onChange={() => setCategory(item)}
+              checked={category === item.id}
+              onChange={() => setCategory(item.id)}
             />
-            {item || "All categories"}
+            <span className="filter-label">{item.label}</span>
+            {item.count > 0 && <span className="filter-count">{item.count}</span>}
           </label>
         ))}
       </fieldset>

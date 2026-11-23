@@ -1,3 +1,5 @@
+import { getCategory } from "../data/categories";
+import { useCategories } from "../lib/useCategories";
 import { useEffect, useState } from "react";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { SearchBar } from "../components/SearchBar";
@@ -49,16 +51,7 @@ export function HomePage({ notify }: { notify?: () => void }) {
     loadData();
   }, []);
 
-  const categories = [
-    "Documents",
-    "Coding",
-    "Data",
-    "Design",
-    "Writing",
-    "Research",
-    "Automation",
-    "Security",
-  ];
+  const categories = useCategories();
 
   return (
     <>
@@ -115,10 +108,10 @@ export function HomePage({ notify }: { notify?: () => void }) {
           <Container>
             <SectionTitle title="Browse by category" />
             <div className="category-grid">
-              {categories.map((c) => (
-                <Link key={c} to={`/browse?category=${encodeURIComponent(c.toLowerCase())}`}>
-                  <Icon name={c === "Security" ? "shield" : c === "Coding" ? "code" : "package"} />
-                  <span>{c}</span>
+              {categories.slice(0, 12).map((c) => (
+                <Link key={c.id} to={`/browse?category=${encodeURIComponent(c.id)}`} title={c.description}>
+                  <Icon name={getCategory(c.id)?.icon ?? "package"} />
+                  <span>{c.label}</span>
                 </Link>
               ))}
             </div>

@@ -11,18 +11,21 @@ import { CodeBlock } from "../components/CodeBlock";
 import { ReportModal } from "../components/ReportModal";
 import { SectionTitle } from "../components/SectionTitle";
 import { SkillCard } from "../components/SkillCard";
+import { OwnershipBadge } from "../components/OwnershipBadge";
+import { ClaimNotice } from "../components/ClaimNotice";
 import { SEO } from "../components/SEO";
 import { Container } from "../components/Container";
 import { LoadingState } from "../components/LoadingState";
 import { NotFoundPage } from "./NotFoundPage";
 import { api, type ApiSkillDetail, ApiError, getApiBaseUrl } from "../lib/api";
 import { githubRepoUrl } from "../lib/safe";
+import { skillJsonLd } from "../lib/llms";
 import { safeMarkdownComponents } from "../components/markdownComponents";
 import { apiDetailToSkill, getRelated, getInstallCommand, getSkillLanguage, formatRelativeTime } from "../lib/skills";
 import type { Skill } from "../types";
 
 export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: string, msg?: string) => void }) {
-  const { slug } = useParams<{ slug: string }>();
+  const slug = useParams()["*"]?.replace(/\/+$/, "") || undefined;
   const outletCtx = useOutletContext<{ notify?: (title?: string, msg?: string) => void } | null>();
   const notify = propNotify || outletCtx?.notify || (() => {});
 
@@ -132,6 +135,15 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
           description={skill.description}
           url={`/skills/${skill.slug}`}
           type="article"
+          jsonLd={skillJsonLd({
+            name: skill.name,
+            description: skill.description,
+            license: skill.license,
+            author: skill.author,
+            sourceUrl: skill.sourceUrl || githubRepoUrl(skill.repo) || undefined,
+            version: skill.version,
+            category: skill.category,
+          })}
         />
         <div className="breadcrumbs">
           <Link to="/">Home</Link>
@@ -164,11 +176,23 @@ export function SkillDetailPage({ notify: propNotify }: { notify?: (title?: stri
                       <Icon name="check" size={18} />
                     </span>
                   )}
+                  <OwnershipBadge claimStatus={skill.claimStatus} />
                 </div>
                 <p>by @{skill.author}</p>
               </div>
             </div>
             <p className="lead">{skill.longDescription || skill.description}</p>
+            {skill.claimStatus === "unclaimed" && (
+              <ClaimNotice
+                name={skill.name}
+                owner={skill.author}
+                sourceUrl={skill.sourceUrl}
+                onClaimed={() => {
+                  notify("Skill claimed", `You now own ${skill.name}.`);
+                  void fetchDetail();
+                }}
+              />
+            )}
             <div className="tags">
               {skill.tags.map((tag) => (
                 <span key={tag}>{tag}</span>

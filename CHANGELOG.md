@@ -7,6 +7,19 @@ All notable changes to this project are documented here. The format follows
 ## [Unreleased]
 
 ### Added
+- 20-category taxonomy across browse, filters, home and categories pages (live from the registry with a bundled fallback).
+- "Unclaimed" badge and claim flow on skill pages.
+- Build-time `llms.txt`, `llms-full.txt`, and JSON-LD (site and skill pages) for AI agents and search engines.
+
+- Prerendered HTML for crawlers that do not run JavaScript: the build writes an `index.html` per route (home, browse, categories, docs pages and the top skills) with its own title, description, canonical URL, JSON-LD and readable content. Live registry builds fetch the most-downloaded skills (`PRERENDER_MAX_SKILLS`, default 300); skill URLs are in `sitemap.xml`.
+
+### Changed
+- Skill pages now live at `/skills/*` so scoped names such as `/skills/@owner/skill` work with clean URLs.
+
+### Fixed
+- Live registry requests now send lowercase category ids and `sort=updated`; filter and category card alignment.
+
+### Added
 - `VITE_REGISTRY_URL` (legacy alias `VITE_API_URL`) and `VITE_SITE_URL` configuration; demo mode with a visible banner when no registry is configured.
 - Cloudflare deployment: `wrangler.jsonc` (static assets, SPA fallback), build-generated `_headers` with a strict CSP, `robots.txt` and `sitemap.xml`, CI and deploy workflows.
 - Shared safe markdown renderer, URL/repository validation helpers, and tests for config, headers, safety helpers and markdown rendering.

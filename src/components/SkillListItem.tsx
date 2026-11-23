@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Icon } from "./Icon";
+import { OwnershipBadge } from "./OwnershipBadge";
 import { formatRelativeTime, getSkillLanguage } from "../lib/skills";
 import type { Skill } from "../types";
 
@@ -18,7 +19,9 @@ export function SkillListItem({ skill }: { skill: Skill }) {
         </span>
         <span>
           <strong>{skill.name}</strong>
-          <small>@{skill.author}</small>
+          <small>
+            @{skill.author} <OwnershipBadge claimStatus={skill.claimStatus} />
+          </small>
         </span>
         <p>{skill.description}</p>
       </button>

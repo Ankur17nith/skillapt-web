@@ -1,6 +1,7 @@
 import rawSkills from "../data/registry.json";
 import type { Skill } from "../types";
 import { getRegistryUrl } from "../config";
+import { CATEGORIES } from "../data/categories";
 
 export interface ApiSkillOwner {
   handle: string;
@@ -17,6 +18,11 @@ export interface ApiSkillSummary {
   downloads: number;
   stars?: number;
   verified: boolean;
+  /** "published" (uploaded) or "crawled" (indexed from a public repository). */
+  source?: string;
+  /** "owned" | "claimed" | "unclaimed" */
+  claimStatus?: string;
+  installCommand?: string;
   owner: ApiSkillOwner;
   updatedAt: string;
 }
@@ -50,10 +56,21 @@ export interface ApiSkillDetail {
   latestVersion: string;
   downloads: number;
   stars?: number;
+  source?: string;
+  claimStatus?: string;
+  sourceUrl?: string | null;
+  installCommand?: string;
   versions: Record<string, ApiSkillVersion>;
   readme?: string;
   createdAt?: string;
   updatedAt: string;
+}
+
+export interface ApiCategory {
+  id: string;
+  label: string;
+  description: string;
+  count: number;
 }
 
 export interface Pagination {
@@ -341,16 +358,51 @@ export function setFallbackMockUser(user: ApiUser | null) {
 
 export const api = {
   /**
+   * What skills are for, with counts. Falls back to the bundled list when the
+   * registry is unreachable so the category UI never breaks.
+   */
+  async getCategories(): Promise<ApiCategory[]> {
+    const local = () => {
+      const counts = new Map<string, number>();
+      for (const s of getFallbackRawSkills()) {
+        const id = s.category?.toLowerCase() || "other";
+        counts.set(id, (counts.get(id) ?? 0) + 1);
+      }
+      return CATEGORIES.map((c) => ({ id: c.id, label: c.label, description: c.description, count: counts.get(c.id) ?? 0 }));
+    };
+    if (!isUsingLiveApi()) return local();
+    try {
+      const res = await request<{ categories: ApiCategory[] }>("/v1/categories");
+      return Array.isArray(res.categories) && res.categories.length > 0 ? res.categories : local();
+    } catch {
+      return local();
+    }
+  },
+
+  /**
+   * Claim a crawled, unclaimed listing. The registry approves it only when the
+   * signed-in GitHub user owns the source repository.
+   */
+  async claimSkill(name: string): Promise<{ name: string; claimStatus: string }> {
+    if (!isUsingLiveApi()) {
+      throw new ApiError(400, "DEMO_MODE", "Claiming needs a configured registry.");
+    }
+    clearApiCache();
+    return request(`/v1/skills/${encodeURIComponent(name)}/claim`, { method: "POST" });
+  },
+
+  /**
    * Fetch skills with query, filters, sorting and pagination
    */
   async getSkills(params: SkillsQueryParams = {}): Promise<SkillsListResponse> {
     if (isUsingLiveApi()) {
       const search = new URLSearchParams();
       if (params.q) search.set("q", params.q);
-      if (params.category && params.category !== "all") search.set("category", params.category);
+      // The registry's category ids and sort keys are lowercase / "updated".
+      if (params.category && params.category.toLowerCase() !== "all") search.set("category", params.category.toLowerCase());
       if (params.compat && params.compat !== "any") search.set("compat", params.compat);
       if (params.verified !== undefined) search.set("verified", String(params.verified));
-      if (params.sort) search.set("sort", params.sort);
+      if (params.sort) search.set("sort", params.sort === "recent" ? "updated" : params.sort);
       if (params.page) search.set("page", String(params.page));
       if (params.limit) search.set("limit", String(params.limit));
 

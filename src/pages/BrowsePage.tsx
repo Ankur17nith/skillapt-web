@@ -1,3 +1,4 @@
+import { categoryLabel } from "../data/categories";
 import { useState, useEffect, useTransition } from "react";
 import { useSearchParams } from "react-router-dom";
 import { PageHeader } from "../components/PageHeader";
@@ -24,7 +25,7 @@ export function BrowsePage() {
 
   // Read URL params
   const query = searchParams.get("q") || "";
-  const category = searchParams.get("category") || "";
+  const category = (searchParams.get("category") || "").toLowerCase();
   const compatibility = searchParams.get("compat") || "";
   const language = searchParams.get("language") || "";
   const verified = searchParams.get("verified") === "true";
@@ -174,7 +175,7 @@ export function BrowsePage() {
                 )}
                 {category && (
                   <span>
-                    {category}
+                    {categoryLabel(category)}
                     <button onClick={() => updateParams({ category: null, page: "1" })} aria-label="Remove category filter">
                       <Icon name="x" size={13} />
                     </button>

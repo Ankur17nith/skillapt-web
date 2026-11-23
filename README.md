@@ -78,6 +78,7 @@ All configuration is build-time via `VITE_*` variables (they are baked into the 
 | Variable | Default | Description |
 | :--- | :--- | :--- |
 | `VITE_REGISTRY_URL` | *(unset = demo mode)* | Base URL of the skillapt registry, e.g. `https://skillapt-registry.<your-subdomain>.workers.dev`. Must be `https://` (plain `http://` only for `localhost`). `VITE_API_URL` is still accepted as a legacy alias. |
+| `PRERENDER_MAX_SKILLS` | `300` | Build-time environment variable (not `VITE_`). How many of the registry's most-downloaded skills get a prerendered page. Other skills still work as client-rendered pages. |
 | `VITE_SITE_URL` | *(unset)* | Public origin of this site, e.g. `https://skillapt-web.<your-subdomain>.workers.dev`. When set, the build emits canonical / Open Graph URLs, `sitemap.xml` and the `Sitemap:` line in `robots.txt`. When unset, no absolute URLs are advertised, which is correct until you have a stable URL. |
 
 The registry URL is also written into the generated CSP `connect-src`, so the browser may only call that one origin.

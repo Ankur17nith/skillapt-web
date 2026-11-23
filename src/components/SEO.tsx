@@ -1,11 +1,14 @@
 import { Helmet } from "react-helmet-async";
 import { CONFIG, getSiteUrl } from "../config";
+import { serializeJsonLd } from "../lib/llms";
 
 interface SEOProps {
   title?: string;
   description?: string;
   url?: string;
   type?: "website" | "article";
+  /** Structured data for this page (schema.org). */
+  jsonLd?: object;
 }
 
 export function SEO({
@@ -13,6 +16,7 @@ export function SEO({
   description = "Discover, install, and share capabilities for AI agents.",
   url = "/",
   type = "website",
+  jsonLd,
 }: SEOProps) {
   const fullTitle = title ? `${title} | ${CONFIG.SITE_NAME}` : `The package manager for AI agent skills | ${CONFIG.SITE_NAME}`;
   // Absolute URLs are only emitted when VITE_SITE_URL is configured; we never
@@ -37,6 +41,8 @@ export function SEO({
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
+
+      {jsonLd && <script type="application/ld+json">{serializeJsonLd(jsonLd)}</script>}
     </Helmet>
   );
 }

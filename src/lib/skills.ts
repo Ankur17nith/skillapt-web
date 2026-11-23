@@ -1,3 +1,4 @@
+import { categoryLabel } from "../data/categories";
 import { parseGithubRepo } from "./safe";
 import rawSkills from "../data/registry.json";
 import type { Skill, FilterOptions, SortOption } from "../types";
@@ -142,12 +143,13 @@ export function apiSummaryToSkill(summary: import("./api").ApiSkillSummary): Ski
     repo: `${summary.owner.handle}/${summary.name}`,
     author: summary.owner.handle,
     tags: [summary.category, ...summary.compatibility],
-    category: summary.category.charAt(0).toUpperCase() + summary.category.slice(1),
+    category: categoryLabel(summary.category),
     ref: `v${summary.latestVersion}`,
     version: summary.latestVersion,
     stars: summary.stars || 0,
     installs: summary.downloads,
     verified: summary.verified,
+    claimStatus: summary.claimStatus,
     compatibility: summary.compatibility,
     license: summary.license,
     updatedAt: summary.updatedAt,
@@ -161,15 +163,18 @@ export function apiDetailToSkill(detail: import("./api").ApiSkillDetail): Skill 
     slug: detail.name,
     description: detail.description,
     longDescription: detail.description,
-    repo: parseGithubRepo(detail.repository) || `${detail.owner.handle}/${detail.name}`,
+    repo:
+      parseGithubRepo(detail.sourceUrl || detail.repository) || `${detail.owner.handle}/${detail.name}`,
     author: detail.owner.handle,
     tags: detail.keywords && detail.keywords.length > 0 ? detail.keywords : [detail.category, ...detail.compatibility],
-    category: detail.category.charAt(0).toUpperCase() + detail.category.slice(1),
+    category: categoryLabel(detail.category),
     ref: `v${detail.latestVersion}`,
     version: detail.latestVersion,
     stars: detail.stars || 0,
     installs: detail.downloads,
-    verified: true,
+    verified: detail.claimStatus !== "unclaimed",
+    claimStatus: detail.claimStatus,
+    sourceUrl: detail.sourceUrl || undefined,
     compatibility: detail.compatibility,
     license: detail.license,
     updatedAt: detail.updatedAt,
