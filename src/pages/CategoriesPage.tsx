@@ -28,7 +28,7 @@ export function CategoriesPage() {
               <div>
                 <strong>{c.label}</strong>
                 <p>{c.description}</p>
-                {c.count > 0 && <small className="category-count">{c.count} skills</small>}
+                {c.count > 0 && <small className="category-count">{c.count} {c.count === 1 ? "skill" : "skills"}</small>}
               </div>
               <Icon name="arrow" size={16} />
             </Link>
